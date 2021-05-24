@@ -1,8 +1,12 @@
+import java.net.Socket;
+
 public abstract class Player
 {
     private String userName;
 
     private boolean isAlive;
+
+    private Socket channel;
 
     public Player(String userName)
     {
@@ -18,5 +22,10 @@ public abstract class Player
     public boolean getIsAlive()
     {
         return isAlive;
+    }
+
+    public Socket getChannel() 
+    {
+        return channel;
     }
 }
