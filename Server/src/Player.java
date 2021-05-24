@@ -12,6 +12,7 @@ public abstract class Player
     {
         this.userName = userName;
         isAlive = true;
+        channel = null;
     }
 
     public String getUserName()
@@ -24,8 +25,18 @@ public abstract class Player
         return isAlive;
     }
 
+    public void setIsAlive(boolean isAlive)
+    {
+        this.isAlive = isAlive;
+    }
+
     public Socket getChannel() 
     {
         return channel;
+    }
+
+    public void setChannel(Socket channel)
+    {
+        this.channel = channel;
     }
 }

@@ -14,6 +14,8 @@ public class God
 
     private int aliveMafiaCount;
 
+    private ChatRoom chatRoom;
+
     public God(int playersCount)
     {
         players = new ArrayList<>();
@@ -29,12 +31,12 @@ public class God
         {
             aliveMafiaCount = playersCount / 3;
         }
-
+        chatRoom = new ChatRoom();
     }
 
     public void game()
     {
-        ChatRoom chatRoom = new ChatRoom();
+        players = chatRoom.connect(0, playersCount);
     }
 
     private void loop()
@@ -46,4 +48,5 @@ public class God
     {
         return players;
     }
+
 }
