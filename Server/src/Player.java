@@ -1,6 +1,8 @@
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public abstract class Player
+public class Player
 {
     private String userName;
 
@@ -8,11 +10,14 @@ public abstract class Player
 
     private Socket channel;
 
-    public Player(String userName)
+    private Role role;
+
+    public Player(String userName, Socket channel)
     {
         this.userName = userName;
         isAlive = true;
-        channel = null;
+        this.channel = channel;
+        role = null;
     }
 
     public String getUserName()

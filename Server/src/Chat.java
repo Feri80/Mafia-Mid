@@ -15,4 +15,14 @@ public class Chat
     {
         return Main.ANSI_PURPLE + sender.getUserName() + " : " + Main.ANSI_BLUE + text + Main.ANSI_RESET;   
     }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public Player getSender()
+    {
+        return sender;
+    }
 }

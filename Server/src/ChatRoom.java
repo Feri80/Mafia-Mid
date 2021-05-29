@@ -1,5 +1,7 @@
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ChatRoom 
 {
@@ -30,16 +32,53 @@ public class ChatRoom
         sendTo(chat, players);
     }
 
-    public ArrayList<Player> connect(int port, int playersCount)
+    public void connect(int port, int playersCount)
     {
+        ExecutorService pool = Executors.newCachedThreadPool();
+        int clientCount = 0;
         try(ServerSocket server = new ServerSocket(port)) 
         {
-            
+            while(clientCount < playersCount)
+            {
+                System.out.println("Server Is Waiting For A New Client.");
+                pool.execute(new ConnectionHandler(server.accept(), this));
+                System.out.println("A Client Accepted");
+                clientCount++;
+            }
+            pool.shutdown();
         } 
         catch(Exception e) 
         {
-
+            e.printStackTrace();
         }
-        return null;
+        while(players.size() < playersCount)
+        {
+            try 
+            {
+                Thread.sleep(1000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public ArrayList<Player> getPlayers()
+    {
+        return players;
+    }
+
+    public synchronized boolean addPlayer(Player player)
+    {
+        for(Player p : players)
+        {
+            if(player.getUserName().trim().equals(p.getUserName().trim()))
+            {
+                return false;
+            }
+        }
+        players.add(player);
+        return true;
     }
 }

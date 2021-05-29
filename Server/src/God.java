@@ -38,8 +38,10 @@ public class God
 
     public void game()
     {
+        chatRoom.connect(port, playersCount);
+        players = chatRoom.getPlayers();
 
-        players = chatRoom.connect(port, playersCount);
+        
     }
 
     private void loop()
