@@ -1,6 +1,10 @@
+package model.logic;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import model.roles.*;
 
 public class Player
 {
@@ -43,5 +47,15 @@ public class Player
     public void setChannel(Socket channel)
     {
         this.channel = channel;
+    }
+
+    public Role getRole()
+    {
+        return role;
+    }   
+
+    public void setRole(Role role)
+    {
+        this.role = role;
     }
 }

@@ -1,3 +1,7 @@
+package model.network;
+
+import model.logic.*;
+
 public class Chat 
 {
     private Player sender;
@@ -13,7 +17,7 @@ public class Chat
     @Override
     public String toString() 
     {
-        return Main.ANSI_PURPLE + sender.getUserName() + " : " + Main.ANSI_BLUE + text + Main.ANSI_RESET;   
+        return God.ANSI_PURPLE + sender.getUserName() + " : " + God.ANSI_BLUE + text + God.ANSI_RESET;   
     }
 
     public String getText()
