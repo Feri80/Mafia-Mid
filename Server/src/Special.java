@@ -1,9 +1,9 @@
-public class Special extends Player
+public class Special extends Role
 {
 
     public Special() 
     {
-        super("GOD");
+        
     }
         
 }

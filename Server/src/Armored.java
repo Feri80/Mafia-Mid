@@ -2,9 +2,8 @@ public class Armored extends Citizen
 {
 
 
-    public Armored(String userName) 
+    public Armored() 
     {
-        super(userName);
         
     }
 }

@@ -2,9 +2,8 @@ public class Sniper extends Citizen
 {
 
     
-    public Sniper(String userName) 
+    public Sniper() 
     {
-        super(userName);
 
     }
 }

@@ -2,9 +2,8 @@ public class Mayor extends Citizen
 {
 
 
-    public Mayor(String userName) 
+    public Mayor() 
     {
-        super(userName);
 
     }
 }

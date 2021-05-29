@@ -2,9 +2,8 @@ public class DoctorLecter extends Mafia
 {
 
 
-    public DoctorLecter(String userName) 
+    public DoctorLecter() 
     {
-        super(userName);
         
     }
 }

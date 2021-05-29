@@ -2,9 +2,8 @@ public class Psychologist extends Citizen
 {
 
 
-    public Psychologist(String userName) 
+    public Psychologist() 
     {
-        super(userName);
         
     }
 }

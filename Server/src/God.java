@@ -14,9 +14,11 @@ public class God
 
     private int aliveMafiaCount;
 
+    private int port;
+
     private ChatRoom chatRoom;
 
-    public God(int playersCount)
+    public God(int playersCount, int port)
     {
         players = new ArrayList<>();
         citizens = new ArrayList<>();
@@ -36,12 +38,23 @@ public class God
 
     public void game()
     {
-        players = chatRoom.connect(0, playersCount);
+
+        players = chatRoom.connect(port, playersCount);
     }
 
     private void loop()
     {
         
+    }
+
+    private void startFirstNight()
+    {
+        divideRoles();
+    }
+
+    private void divideRoles()
+    {
+
     }
 
     private ArrayList<Player> getPlayers()

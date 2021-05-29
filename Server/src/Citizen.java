@@ -1,10 +1,9 @@
-public class Citizen extends Player
+public class Citizen extends Role
 {
 
 
-    public Citizen(String userName)
+    public Citizen()
     {
-        super(userName);
 
         
     }

@@ -1,10 +1,9 @@
-public class Mafia extends Player
+public class Mafia extends Role
 {
     
 
-    public Mafia(String userName)
+    public Mafia()
     {
-        super(userName);
 
         
     }

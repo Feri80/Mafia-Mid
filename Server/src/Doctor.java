@@ -2,9 +2,8 @@ public class Doctor extends Citizen
 {
 
 
-    public Doctor(String userName) 
+    public Doctor() 
     {
-        super(userName);
 
     }
 }
