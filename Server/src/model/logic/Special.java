@@ -7,7 +7,7 @@ public class Special extends Player
 
     public Special() 
     {
-        super("GOD", null);
+        super("GOD", null, null, null);
     }
         
 }

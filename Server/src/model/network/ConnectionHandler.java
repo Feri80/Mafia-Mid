@@ -22,15 +22,19 @@ public class ConnectionHandler implements Runnable
     @Override
     public void run() 
     {
-        try(ObjectOutputStream out = new ObjectOutputStream(channel.getOutputStream()); 
-            ObjectInputStream in = new ObjectInputStream(channel.getInputStream()))
+        try
         {
+            ObjectOutputStream out = new ObjectOutputStream(channel.getOutputStream()); 
+            ObjectInputStream in = new ObjectInputStream(channel.getInputStream());
+
             out.writeObject(new Chat(new Special(), "OK your connected to the server please enter your name to start the game."));
-            while(chatRoom.addPlayer(new Player(((Chat)in.readObject()).getText(), channel)) != true)
+
+            while(chatRoom.addPlayer(new Player(((Chat)in.readObject()).getText(), channel, out, in)) != true)
             {
                 out.writeObject(new Chat(new Special(), "This username is already taken please enter another one."));
             }
 
+            out.flush();
         } 
         catch (Exception e) 
         {

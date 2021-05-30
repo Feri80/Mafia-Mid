@@ -12,16 +12,23 @@ public class Player
 
     private boolean isAlive;
 
-    private Socket channel;
-
     private Role role;
 
-    public Player(String userName, Socket channel)
+    private Socket channel;
+
+    private ObjectOutputStream objectOutputStream;
+
+    private ObjectInputStream objectInputStream;
+
+
+    public Player(String userName, Socket channel, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream)
     {
         this.userName = userName;
         isAlive = true;
-        this.channel = channel;
         role = null;
+        this.channel = channel;
+        this.objectOutputStream = objectOutputStream;
+        this.objectInputStream = objectInputStream;
     }
 
     public String getUserName()
@@ -47,6 +54,16 @@ public class Player
     public void setChannel(Socket channel)
     {
         this.channel = channel;
+    }
+
+    public ObjectOutputStream getObjectOutputStream()
+    {
+        return objectOutputStream;
+    }
+
+    public ObjectInputStream getObjectInputStream()
+    {
+        return objectInputStream;
     }
 
     public Role getRole()

@@ -20,15 +20,24 @@ public class ChatRoom
         chats = new ArrayList<>();
     }
 
+    public void readFrom(Player sender)
+    {
+        Thread thread = new Thread(new ReadingChatHandler(sender));
+        thread.start();
+    }
 
     public void sendTo(Chat chat, Player dest) 
     {
-        
+        Thread thread = new Thread(new SendingChatHandler(dest, chat));
+        thread.start();
     }
 
     public void sendTo(Chat chat, ArrayList<Player> dest)
     {
-
+        for(Player p : dest)
+        {
+            sendTo(chat, p);
+        }
     }
 
     public void sendToAll(Chat chat)
