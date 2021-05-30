@@ -53,10 +53,10 @@ public class God
             aliveMafiaCount = playersCount / 3;
         }
         chatRoom = new ChatRoom();
-        state = "";
+        state = "trash";
     }
 
-    public void game()
+    public void startGame()
     {
         chatRoom.connect(port, playersCount);
         players = chatRoom.getPlayers();
@@ -71,13 +71,31 @@ public class God
                 citizens.add(player);
             }
         }
-
-        
+        startFirstNight();
+        loop();
     }
 
     private void loop()
     {
-        
+        checkFinishConditions();
+        startDay();
+        checkFinishConditions();
+        startNight();
+    }
+
+    private void startDay()
+    {
+
+    }
+
+    private void startVoting()
+    {
+
+    }
+
+    private void startNight()
+    {
+
     }
 
     private void startFirstNight()
@@ -87,6 +105,11 @@ public class God
         sendRoles();
         mafiasIntroduction();
         introduceDoctorToMayor();
+    }
+
+    public void checkFinishConditions()
+    {
+
     }
     
     public void setRoles()

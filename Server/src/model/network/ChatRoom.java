@@ -63,7 +63,7 @@ public class ChatRoom
             {
                 System.out.println("Server Is Waiting For A New Client.");
                 pool.execute(new ConnectionHandler(server.accept(), this));
-                System.out.println("A Client Accepted");
+                System.out.println("A Client Accepted.");
                 clientCount++;
             }
             pool.shutdown();
@@ -76,13 +76,14 @@ public class ChatRoom
         {
             try 
             {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } 
             catch (InterruptedException e) 
             {
                 e.printStackTrace();
             }
         }
+        System.out.println("All Client Are Connected.");
     }
 
     public ArrayList<Player> getPlayers()

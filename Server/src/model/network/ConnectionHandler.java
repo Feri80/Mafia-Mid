@@ -33,7 +33,8 @@ public class ConnectionHandler implements Runnable
             {
                 out.writeObject(new Chat(new Special(), "This username is already taken please enter another one."));
             }
-
+            out.writeObject(new Chat(new Special(), "OK your username accepted."));
+            out.writeObject(new Chat(new Special(), "MUTE"));
             out.flush();
         } 
         catch (Exception e) 

@@ -46,6 +46,6 @@ public class Main
     public static void main(String[] args) 
     {
         God god = new God(getPlayersCount(), getPort());
-        god.game();
+        god.startGame();
     }
 }
