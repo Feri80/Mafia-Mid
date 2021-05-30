@@ -21,9 +21,9 @@ public class God
 
     private ArrayList<Player> players;   
 
-    private ArrayList<Citizen> citizens;
+    private ArrayList<Player> citizens;
 
-    private ArrayList<Mafia> mafias;
+    private ArrayList<Player> mafias;
 
     private int playersCount;
 
@@ -60,6 +60,17 @@ public class God
     {
         chatRoom.connect(port, playersCount);
         players = chatRoom.getPlayers();
+        for(Player player : players)
+        {
+            if(player.getRole() instanceof Mafia)
+            {
+                mafias.add(player);
+            }
+            else
+            {
+                citizens.add(player);
+            }
+        }
 
         
     }
@@ -74,12 +85,14 @@ public class God
         state = "firstNight";
         setRoles();
         sendRoles();
+        mafiasIntroduction();
+        introduceDoctorToMayor();
     }
-
+    
     public void setRoles()
     {
         ArrayList<Role> roles = new ArrayList<>();
-
+        
         if(playersCount >= 8)
         {
             roles.add(new GodFather());
@@ -99,15 +112,15 @@ public class God
                 roles.add(new Citizen());
             }
         }
-
+        
         Collections.shuffle(roles);
-
+        
         for(int i = 0; i < playersCount ; i++)
         {
             players.get(i).setRole(roles.get(i));
         }
     }
-
+    
     public void sendRoles()
     {
         for(Player player : players)
@@ -116,6 +129,44 @@ public class God
         }
     }
     
+    public void mafiasIntroduction()
+    {
+        String text = "Mafias : \n";
+        for(Player mafia : mafias)
+        {
+            if(mafia.getRole() instanceof GodFather)
+            {
+                text += (mafia.getUserName() + " Is GodFather \n"); 
+            }
+            else if(mafia.getRole() instanceof DoctorLecter)
+            {
+                text += (mafia.getUserName() + " Is Doctor Lecter \n");
+            }
+            else
+            {
+                text += (mafia.getUserName() + " Is Regular Mafia \n");
+            }
+        }
+        chatRoom.sendTo(new Chat(new Special(), text), mafias);
+    }
+    
+    public void introduceDoctorToMayor()
+    {
+        for(Player mayor : citizens)
+        {
+            if(mayor.getRole() instanceof Mayor)
+            {
+                for(Player doctor : citizens)
+                {
+                    if(doctor.getRole() instanceof Doctor)
+                    {
+                        chatRoom.sendTo(new Chat(new Special(), doctor.getUserName() + " Is Doctor"), mayor);
+                    }
+                }
+            }
+        }
+    }
+
     private ArrayList<Player> getPlayers()
     {
         return players;
