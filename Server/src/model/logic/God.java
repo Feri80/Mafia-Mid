@@ -35,6 +35,8 @@ public class God
 
     private ChatRoom chatRoom;
 
+    private String state;
+
     public God(int playersCount, int port)
     {
         players = new ArrayList<>();
@@ -51,15 +53,27 @@ public class God
             aliveMafiaCount = playersCount / 3;
         }
         chatRoom = new ChatRoom();
+        state = "";
     }
 
     public void game()
     {
         chatRoom.connect(port, playersCount);
         players = chatRoom.getPlayers();
-        this.setRoles();
 
         
+    }
+
+    private void loop()
+    {
+        
+    }
+
+    private void startFirstNight()
+    {
+        state = "firstNight";
+        setRoles();
+        sendRoles();
     }
 
     public void setRoles()
@@ -94,21 +108,14 @@ public class God
         }
     }
 
-    private void loop()
+    public void sendRoles()
     {
-        
+        for(Player player : players)
+        {
+            chatRoom.sendTo(new Chat(new Special(), player.getUserName() + "Your Role Is : " + player.getRole()), player);
+        }
     }
-
-    private void startFirstNight()
-    {
-        divideRoles();
-    }
-
-    private void divideRoles()
-    {
-
-    }
-
+    
     private ArrayList<Player> getPlayers()
     {
         return players;

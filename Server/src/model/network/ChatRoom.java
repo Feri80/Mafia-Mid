@@ -26,6 +26,14 @@ public class ChatRoom
         thread.start();
     }
 
+    public void readFromAll()
+    {
+        for(Player player : players)
+        {
+            readFrom(player);
+        }
+    }
+
     public void sendTo(Chat chat, Player dest) 
     {
         Thread thread = new Thread(new SendingChatHandler(dest, chat));
