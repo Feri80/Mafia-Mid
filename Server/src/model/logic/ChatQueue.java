@@ -25,5 +25,8 @@ public class ChatQueue
         return chat;
     }
 
-    
+    public synchronized boolean isEmpty()
+    {
+        return queue.isEmpty();
+    }
 }

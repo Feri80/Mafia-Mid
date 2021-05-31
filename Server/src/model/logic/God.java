@@ -6,7 +6,6 @@ import java.util.Collections;
 import model.network.*;
 import model.roles.*;
 
-
 public class God 
 {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -83,13 +82,56 @@ public class God
     {
         checkFinishConditions();
         startDay();
+        startVoting();
         checkFinishConditions();
         startNight();
     }
 
     private void startDay()
     {
+        state = "day";
 
+        chatRoom.sendToAll(new Chat(new Special(), "FREE"));
+        chatRoom.sendToAll(new Chat(new Special(), "UNMUTE"));
+
+        Boolean isTimed = false;
+        Thread timer = new Thread(new Timer(isTimed, 180000));
+        timer.start();
+
+        while(isTimed == false)
+        {
+            if(!chatQueue.isEmpty())
+            {
+                chatRoom.sendToAll(chatQueue.popFrontChat());
+            }
+        }
+
+        chatRoom.sendToAll(new Chat(new Special(), "MUTE"));
+
+        try 
+        {
+            Thread.sleep(1000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
+        while(!chatQueue.isEmpty())
+        {
+            chatRoom.sendToAll(chatQueue.popFrontChat());
+        }
+
+        chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
+
+        try 
+        {
+            Thread.sleep(10000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
     }
 
     private void startVoting()
@@ -109,11 +151,38 @@ public class God
         sendRoles();
         mafiasIntroduction();
         introduceDoctorToMayor();
+        chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
+        try 
+        {
+            Thread.sleep(10000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
     }
 
     public void checkFinishConditions()
     {
+        if(aliveMafiaCount == 0)
+        {   
+            chatRoom.sendToAll(new Chat(new Special(), "Congrats To All Citizens \n  Citizen Won The Game."));
+        }
+        else if(aliveMafiaCount == (alivePlayersCount - aliveMafiaCount))
+        {
+            chatRoom.sendToAll(new Chat(new Special(), "Congrats To All Mafias \n  Mafia Won The Game."));
+        }
 
+        try 
+        {
+            Thread.sleep(5000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
+        System.exit(0);
     }
     
     public void setRoles()
