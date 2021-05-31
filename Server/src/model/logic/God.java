@@ -35,6 +35,8 @@ public class God
 
     private ChatRoom chatRoom;
 
+    private ChatQueue chatQueue;
+
     private String state;
 
     public God(int playersCount, int port)
@@ -53,6 +55,7 @@ public class God
             aliveMafiaCount = playersCount / 3;
         }
         chatRoom = new ChatRoom();
+        chatQueue = new ChatQueue();
         state = "trash";
     }
 
@@ -72,6 +75,7 @@ public class God
             }
         }
         startFirstNight();
+        chatRoom.readFromAll(chatQueue);
         loop();
     }
 

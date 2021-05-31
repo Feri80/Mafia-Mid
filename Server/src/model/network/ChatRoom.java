@@ -20,17 +20,17 @@ public class ChatRoom
         chats = new ArrayList<>();
     }
 
-    public void readFrom(Player sender)
+    public void readFrom(Player sender, ChatQueue chatQueue)
     {
-        Thread thread = new Thread(new ReadingChatHandler(sender));
+        Thread thread = new Thread(new ReadingChatHandler(sender, chatQueue));
         thread.start();
     }
 
-    public void readFromAll()
+    public void readFromAll(ChatQueue chatQueue)
     {
         for(Player player : players)
         {
-            readFrom(player);
+            readFrom(player, chatQueue);
         }
     }
 
