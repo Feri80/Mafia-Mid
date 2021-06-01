@@ -2,23 +2,24 @@ package model.logic;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 
 import model.roles.*;
 
-public class Player
+public class Player implements Serializable
 {
     private String userName;
 
-    private boolean isAlive;
+    private transient boolean isAlive;
 
-    private Role role;
+    private transient Role role;
 
-    private Socket channel;
+    private transient Socket channel;
 
-    private ObjectOutputStream objectOutputStream;
+    private transient ObjectOutputStream objectOutputStream;
 
-    private ObjectInputStream objectInputStream;
+    private transient ObjectInputStream objectInputStream;
 
 
     public Player(String userName, Socket channel, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream)

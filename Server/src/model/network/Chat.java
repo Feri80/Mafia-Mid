@@ -1,8 +1,10 @@
 package model.network;
 
+import java.io.Serializable;
+
 import model.logic.*;
 
-public class Chat 
+public class Chat implements Serializable
 {
     private Player sender;
 
