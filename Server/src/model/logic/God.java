@@ -2,6 +2,7 @@ package model.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import model.network.*;
 import model.roles.*;
@@ -24,6 +25,8 @@ public class God
 
     private ArrayList<Player> mafias;
 
+    private HashMap<Player, Integer> votes;
+
     private int playersCount;
 
     private int alivePlayersCount;
@@ -43,6 +46,7 @@ public class God
         players = new ArrayList<>();
         citizens = new ArrayList<>();
         mafias = new ArrayList<>();
+        votes = new HashMap<>();
         this.playersCount = playersCount;
         alivePlayersCount = playersCount;
         if(playersCount <= 7)
@@ -91,6 +95,8 @@ public class God
     {
         state = "day";
 
+        chatRoom.sendToAll(new Chat(new Special(), "Day Starts You Can Wake Up."));
+
         chatRoom.sendToAll(new Chat(new Special(), "FREE"));
         chatRoom.sendToAll(new Chat(new Special(), "UNMUTE"));
 
@@ -122,7 +128,7 @@ public class God
             chatRoom.sendToAll(chatQueue.popFrontChat());
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
+        chatRoom.sendToAll(new Chat(new Special(), "Voting Starts In 10 Seconds."));
 
         try 
         {
@@ -132,10 +138,31 @@ public class God
         {
             e.printStackTrace();
         }
+
+        state = "trash";
     }
 
     private void startVoting()
     {
+        state = "vote";
+
+        chatRoom.sendToAll(new Chat(new Special(), "Voting Please Choose One Of The Valid Choices In 30 Seconds."));
+        chatRoom.sendToAll(new Chat(new Special(), playersToString()));
+
+        chatRoom.sendToAll(new Chat(new Special(), "VOTE"));
+        chatRoom.sendToAll(new Chat(new Special(), "UNMUTE"));
+
+        Boolean isTimed = false;
+        Thread timer = new Thread(new Timer(isTimed, 30000));
+        timer.start();
+
+        while(isTimed == false)
+        {
+            if(!chatQueue.isEmpty())
+            {
+                chatRoom.sendToAll(chatQueue.popFrontChat());
+            }
+        }
 
     }
 
@@ -162,7 +189,19 @@ public class God
         }
     }
 
-    public void checkFinishConditions()
+    private String playersToString()
+    {
+        String s = "";
+        int i = 1;
+        for(Player player : players)
+        {
+            s += ANSI_PURPLE + i + ANSI_RESET + " : " + ANSI_BLUE + player.getUserName() + ANSI_RESET;
+            i++;
+        }
+        return s;
+    }
+
+    private void checkFinishConditions()
     {
         if(aliveMafiaCount == 0)
         {   
@@ -185,7 +224,7 @@ public class God
         System.exit(0);
     }
     
-    public void setRoles()
+    private void setRoles()
     {
         ArrayList<Role> roles = new ArrayList<>();
         
@@ -217,7 +256,7 @@ public class God
         }
     }
     
-    public void sendRoles()
+    private void sendRoles()
     {
         for(Player player : players)
         {
@@ -225,7 +264,7 @@ public class God
         }
     }
     
-    public void mafiasIntroduction()
+    private void mafiasIntroduction()
     {
         String text = "Mafias : \n";
         for(Player mafia : mafias)
@@ -246,7 +285,7 @@ public class God
         chatRoom.sendTo(new Chat(new Special(), text), mafias);
     }
     
-    public void introduceDoctorToMayor()
+    private void introduceDoctorToMayor()
     {
         for(Player mayor : citizens)
         {
@@ -263,7 +302,7 @@ public class God
         }
     }
 
-    private ArrayList<Player> getPlayers()
+    public ArrayList<Player> getPlayers()
     {
         return players;
     }
