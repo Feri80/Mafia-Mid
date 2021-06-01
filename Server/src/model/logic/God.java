@@ -86,6 +86,24 @@ public class God
         loop();
     }
 
+    private void startFirstNight()
+    {
+        state = "firstNight";
+        setRoles();
+        sendRoles();
+        mafiasIntroduction();
+        introduceDoctorToMayor();
+        chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
+        try 
+        {
+            Thread.sleep(10000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+
     private void loop()
     {
         checkFinishConditions();
@@ -192,26 +210,71 @@ public class God
             }
         }
 
+        try 
+        {
+            Thread.sleep(1000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
         chatRoom.sendToAll(new Chat(new Special(), votersToString()));
+
+        try 
+        {
+            Thread.sleep(3000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
         chatRoom.sendToAll(new Chat(new Special(), votesToString()));
+        
+        try 
+        {
+            Thread.sleep(3000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
 
+        Player candidate = findKillCandidate();
 
+        
 
-    }
+        if(candidate == null)
+        {
+            chatRoom.sendToAll(new Chat(new Special(), "No One Will Be Killed."));
+        }
+        else
+        {
+            chatRoom.sendToAll(new Chat(new Special(), candidate.getUserName() + " Will Be Killed."));
+            chatRoom.sendToAll(new Chat(new Special(), "It Is Mayor's Time To Play."));
+            boolean isCanceled = mayorRole();
+            if(isCanceled == true)
+            {
+                chatRoom.sendToAll(new Chat(new Special(), "Mayor Canceled The Voting. No One Will Be Killed."));
+            }
+            else
+            {
+                chatRoom.sendToAll(new Chat(new Special(), "Mayor Accepted The Voting."));
+                candidate.setIsAlive(false);
+                alivePlayersCount--;
+                alivePlayers.remove(candidate);
+                if(candidate.getRole() instanceof Mafia)
+                {
+                    aliveMafiaCount--;
+                }
+            }
+        }
 
-    private void startNight()
-    {
+        votes.clear();
 
-    }
+        chatRoom.sendToAll(new Chat(new Special(), "Night Starts In 10 Seconds."));
 
-    private void startFirstNight()
-    {
-        state = "firstNight";
-        setRoles();
-        sendRoles();
-        mafiasIntroduction();
-        introduceDoctorToMayor();
-        chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
         try 
         {
             Thread.sleep(10000);
@@ -219,6 +282,98 @@ public class God
         catch (InterruptedException e) 
         {
             e.printStackTrace();
+        }
+
+        state = "trash";
+    }
+
+    private void startNight()
+    {
+        state = "night";
+
+        chatRoom.sendToAll(new Chat(new Special(), "Night Starts."));
+
+
+    }
+
+    private boolean mayorRole()
+    {
+        Player mayor = null;
+        for(Player p : alivePlayers)
+        {
+            if(p.getRole() instanceof Mayor)
+            {
+                mayor = p;
+            }
+        }
+
+        if(mayor == null)
+        {
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 30000));
+            timer.start();
+
+            while(isTimed == false)
+            {
+
+            }
+
+            return false;
+        }
+        else
+        {
+            chatRoom.sendTo(new Chat(new Special(), "Mayor If Your Want To Cancel This Voting Just Send 1\nNote That Your Last Message Will Be Accepted."), mayor);
+            
+            chatRoom.sendTo(new Chat(new Special(), "VOTE"), mayor);
+            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), mayor);
+
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 30000));
+            timer.start();
+
+            boolean isCanceled = false;
+
+            Chat c = null;
+
+            while(isTimed == false)
+            {
+                if(!chatQueue.isEmpty())
+                {
+                    c = chatQueue.popFrontChat();
+                }
+            }
+
+            chatRoom.sendTo(new Chat(new Special(), "MUTE"), mayor);
+
+            try 
+            {
+                Thread.sleep(1000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+
+            while(!chatQueue.isEmpty())
+            {
+                c = chatQueue.popFrontChat();            
+            }
+
+            if(c == null)
+            {
+                return false;
+            }
+            else
+            {
+                if(Integer.parseInt(c.getText()) == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 
@@ -264,8 +419,42 @@ public class God
         {
             s += ANSI_RED + alivePlayers.get(i).getUserName() + ANSI_GREEN + " : " + ANSI_PURPLE + a[i] + ANSI_RESET + "\n";
         }
-        
+
         return s;
+    }
+
+    private Player findKillCandidate()
+    {
+        int[] a = new int[alivePlayersCount];
+
+        for(int i = 0; i < alivePlayersCount; i++)
+        {
+            a[i] = 0;
+        }
+
+        for(Player voter : votes.keySet())
+        {
+            a[alivePlayers.indexOf(votes.get(voter))]++;
+        }
+
+        Player candidate = null;
+        int max = 0;
+
+        for(int i = 0; i < alivePlayersCount; i++)
+        {
+            if(a[i] > max)
+            {
+                max = a[i];
+                candidate = alivePlayers.get(i);
+            }
+        }
+
+        if(max > ((alivePlayersCount - 1) / 2))
+        {
+            return candidate;
+        }
+        
+        return null;
     }
 
     private void checkFinishConditions()
@@ -279,9 +468,11 @@ public class God
             chatRoom.sendToAll(new Chat(new Special(), "Congrats To All Mafias \n  Mafia Won The Game."));
         }
 
+        chatRoom.sendToAll(new Chat(new Special(), "END"));
+
         try 
         {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } 
         catch (InterruptedException e) 
         {
