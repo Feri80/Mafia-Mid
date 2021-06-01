@@ -21,11 +21,13 @@ public class God
 
     private ArrayList<Player> players;   
 
+    private ArrayList<Player> alivePlayers;   
+
     private ArrayList<Player> citizens;
 
     private ArrayList<Player> mafias;
 
-    private HashMap<Player, Integer> votes;
+    private HashMap<Player, Player> votes;
 
     private int playersCount;
 
@@ -44,6 +46,7 @@ public class God
     public God(int playersCount, int port)
     {
         players = new ArrayList<>();
+        alivePlayers = new ArrayList<>();
         citizens = new ArrayList<>();
         mafias = new ArrayList<>();
         votes = new HashMap<>();
@@ -66,6 +69,7 @@ public class God
     {
         chatRoom.connect(port, playersCount);
         players = chatRoom.getPlayers();
+        alivePlayers = players;
         for(Player player : players)
         {
             if(player.getRole() instanceof Mafia)
@@ -97,8 +101,8 @@ public class God
 
         chatRoom.sendToAll(new Chat(new Special(), "Day Starts You Can Wake Up."));
 
-        chatRoom.sendToAll(new Chat(new Special(), "FREE"));
-        chatRoom.sendToAll(new Chat(new Special(), "UNMUTE"));
+        chatRoom.sendToAllAlive(new Chat(new Special(), "FREE"));
+        chatRoom.sendToAllAlive(new Chat(new Special(), "UNMUTE"));
 
         Boolean isTimed = false;
         Thread timer = new Thread(new Timer(isTimed, 180000));
@@ -112,7 +116,7 @@ public class God
             }
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "MUTE"));
+        chatRoom.sendToAllAlive(new Chat(new Special(), "MUTE"));
 
         try 
         {
@@ -147,10 +151,10 @@ public class God
         state = "vote";
 
         chatRoom.sendToAll(new Chat(new Special(), "Voting Please Choose One Of The Valid Choices In 30 Seconds."));
-        chatRoom.sendToAll(new Chat(new Special(), playersToString()));
+        chatRoom.sendToAll(new Chat(new Special(), alivePlayersToString()));
 
-        chatRoom.sendToAll(new Chat(new Special(), "VOTE"));
-        chatRoom.sendToAll(new Chat(new Special(), "UNMUTE"));
+        chatRoom.sendToAllAlive(new Chat(new Special(), "VOTE"));
+        chatRoom.sendToAllAlive(new Chat(new Special(), "UNMUTE"));
 
         Boolean isTimed = false;
         Thread timer = new Thread(new Timer(isTimed, 30000));
@@ -160,9 +164,38 @@ public class God
         {
             if(!chatQueue.isEmpty())
             {
-                chatRoom.sendToAll(chatQueue.popFrontChat());
+                Chat c = chatQueue.popFrontChat();
+                if(!((Integer.parseInt(c.getText()) < 1) || (Integer.parseInt(c.getText()) > alivePlayersCount)))
+                {
+                    votes.put(c.getSender(), alivePlayers.get( ( Integer.parseInt(c.getText()) - 1) ));
+                }
             }
         }
+
+        chatRoom.sendToAllAlive(new Chat(new Special(), "MUTE"));
+
+        try 
+        {
+            Thread.sleep(1000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
+        while(!chatQueue.isEmpty())
+        {
+            Chat c = chatQueue.popFrontChat();
+            if(!((Integer.parseInt(c.getText()) < 1) || (Integer.parseInt(c.getText()) > alivePlayersCount)))
+            {
+                votes.put(c.getSender(), alivePlayers.get( ( Integer.parseInt(c.getText()) - 1) ));
+            }
+        }
+
+        chatRoom.sendToAll(new Chat(new Special(), votersToString()));
+        chatRoom.sendToAll(new Chat(new Special(), votesToString()));
+
+
 
     }
 
@@ -189,15 +222,49 @@ public class God
         }
     }
 
-    private String playersToString()
+    private String alivePlayersToString()
     {
         String s = "";
         int i = 1;
-        for(Player player : players)
+        for(Player player : alivePlayers)
         {
-            s += ANSI_PURPLE + i + ANSI_RESET + " : " + ANSI_BLUE + player.getUserName() + ANSI_RESET;
+            s += ANSI_PURPLE + i + ANSI_RESET + " : " + ANSI_BLUE + player.getUserName() + ANSI_RESET + "\n";
             i++;
         }
+        return s;
+    }
+
+    private String votersToString()
+    {
+        String s = "";
+        for(Player voter : votes.keySet())
+        {
+            s += ANSI_YELLOW + voter.getUserName() + ANSI_GREEN + " -> " + ANSI_PURPLE + votes.get(voter) + ANSI_RESET + "\n";
+        }
+        return s;
+
+    }
+
+    private String votesToString()
+    {
+        String s = "";
+        int[] a = new int[alivePlayersCount];
+
+        for(int i = 0; i < aliveMafiaCount; i++)
+        {
+            a[i] = 0;
+        }
+
+        for(Player voter : votes.keySet())
+        {
+            a[alivePlayers.indexOf(votes.get(voter))]++;
+        }
+
+        for(int i = 0; i < aliveMafiaCount; i++)
+        {
+            s += ANSI_RED + alivePlayers.get(i).getUserName() + ANSI_GREEN + " : " + ANSI_PURPLE + a[i] + ANSI_RESET + "\n";
+        }
+        
         return s;
     }
 

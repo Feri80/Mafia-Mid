@@ -12,11 +12,14 @@ public class ChatRoom
 
     private ArrayList<Player> players;
 
+    private ArrayList<Player> alivePlayers;
+
     private ArrayList<Chat> chats;
 
     public ChatRoom()
     {
         players = new ArrayList<>();
+        alivePlayers = new ArrayList<>();
         chats = new ArrayList<>();
     }
 
@@ -51,6 +54,17 @@ public class ChatRoom
     public void sendToAll(Chat chat)
     {
         sendTo(chat, players);
+    }
+
+    public void sendToAllAlive(Chat chat)
+    {
+        for(Player p : players)
+        {
+            if(p.getIsAlive() == true)
+            {
+                sendTo(chat, p);
+            }
+        }
     }
 
     public void connect(int port, int playersCount)
