@@ -293,7 +293,110 @@ public class God
 
         chatRoom.sendToAll(new Chat(new Special(), "Night Starts."));
 
+        Player mafiasCandidate = mafiaRole();
+    }
 
+    private Player mafiaRole()
+    {
+        Player candidate = null;
+
+        for(Player player : mafias)
+        {
+            if(player.getIsAlive() == true)
+            {
+                chatRoom.sendTo(new Chat(new Special(), "Voting Please Choose One Of The Valid Choices In 20 Seconds.\n Just GodFather Vote Is Effective."), player);
+                chatRoom.sendTo(new Chat(new Special(), aliveCitizenToString()), player);
+                chatRoom.sendTo(new Chat(new Special(), "VOTE"), player);
+                chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), player);
+            }
+        }
+
+        Boolean isTimed = false;
+        Thread timer = new Thread(new Timer(isTimed, 20000));
+        timer.start();
+
+        int aliveCitizenCount = 0;
+        for(Player player : alivePlayers)
+        {
+            if(player.getRole() instanceof Citizen)
+            {
+                aliveCitizenCount++;
+            }
+        }
+        
+        while(isTimed == false)
+        {
+            if(!chatQueue.isEmpty())
+            {
+                Chat c = chatQueue.popFrontChat();
+                if(c.getSender().getRole() instanceof GodFather)
+                {
+                    int k = Integer.parseInt(c.getText());
+                    if(!((k < 1) || (k > aliveCitizenCount)))
+                    {
+                        int i = 1;
+                        for(Player player : alivePlayers)
+                        {
+                            if(player.getRole() instanceof Citizen)
+                            {
+                                if(i == k)
+                                {
+                                    candidate = player;
+                                }
+                                i++;
+                            }
+                            
+                        }
+                    }
+                }
+                chatRoom.sendTo(c, mafias);
+            }
+        }
+
+        for(Player player : mafias)
+        {
+            if(player.getIsAlive() == true)
+            {
+                chatRoom.sendTo(new Chat(new Special(), "MUTE"), player);
+            }
+        }
+
+        try 
+        {
+            Thread.sleep(1000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
+        while(!chatQueue.isEmpty())
+        {
+            Chat c = chatQueue.popFrontChat();
+            if(c.getSender().getRole() instanceof GodFather)
+            {
+                int k = Integer.parseInt(c.getText());
+                if(!((k < 1) || (k > aliveCitizenCount)))
+                {
+                    int i = 1;
+                    for(Player player : alivePlayers)
+                    {
+                        if(player.getRole() instanceof Citizen)
+                        {
+                            if(i == k)
+                            {
+                                candidate = player;
+                            }
+                            i++;
+                        }
+                        
+                    }
+                }
+            }
+            chatRoom.sendTo(c, mafias);
+        }
+
+        return candidate;
     }
 
     private boolean mayorRole()
@@ -385,6 +488,21 @@ public class God
         {
             s += ANSI_PURPLE + i + ANSI_RESET + " : " + ANSI_BLUE + player.getUserName() + ANSI_RESET + "\n";
             i++;
+        }
+        return s;
+    }
+
+    private String aliveCitizenToString()
+    {
+        String s = "";
+        int i = 1;
+        for(Player player : alivePlayers)
+        {
+            if(player.getRole() instanceof Citizen)
+            {
+                s += ANSI_PURPLE + i + ANSI_RESET + " : " + ANSI_BLUE + player.getUserName() + ANSI_RESET + "\n";
+                i++;
+            }
         }
         return s;
     }
