@@ -298,6 +298,8 @@ public class God
         Player doctorLecterCandidate = doctorLecterRole();
 
         Player doctorCandidate = doctorRole();
+
+        
     }
 
     private Player mafiaRole()
@@ -509,10 +511,99 @@ public class God
 
     private Player doctorRole()
     {
+        chatRoom.sendToAll(new Chat(new Special(), "Doctor Wake Up."));
         Player candidate = null;
 
+        Player doctor = null;
+        for(Player p : alivePlayers)
+        {
+            if(p.getRole() instanceof Doctor)
+            {
+                doctor = p;
+            }
+        }
 
+        if(doctor == null)
+        {
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 20000));
+            timer.start();
 
+            while(isTimed == false)
+            {
+
+            }
+        }
+        else
+        {
+            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Playes To Heal In 20 Seconds. You Cant Choose Yourself 3 Times."), doctor);
+            chatRoom.sendTo(new Chat(new Special(), alivePlayersToString()), doctor);
+            chatRoom.sendTo(new Chat(new Special(), "VOTE"), doctor);
+            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), doctor);
+
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 20000));
+            timer.start();
+
+            Chat c = null;
+
+            while(isTimed == false)
+            {
+                if(!chatQueue.isEmpty())
+                {
+                    c = chatQueue.popFrontChat();
+                }
+            }
+
+            chatRoom.sendTo(new Chat(new Special(), "MUTE"), doctor);
+
+            try 
+            {
+                Thread.sleep(1000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+
+            while(!chatQueue.isEmpty())
+            {
+                c = chatQueue.popFrontChat();            
+            }
+
+            if(c == null)
+            {
+                candidate = null;
+            }
+            else
+            {
+                int k = Integer.parseInt(c.getText());
+
+                if(!((k < 1) || (k > alivePlayersCount)))
+                {
+                    int i = 1;
+                    for(Player player : alivePlayers)
+                    {
+                        if(i == k)
+                        {
+                            candidate = player;
+                        }
+                        i++;
+                    }
+                }
+
+                if((candidate.getRole() instanceof Doctor) && (((Doctor)doctor.getRole()).getSelfHealCount() == 2))
+                {
+                    candidate = null;
+                }
+                else if((candidate.getRole() instanceof Doctor) && (((Doctor)doctor.getRole()).getSelfHealCount() < 2))
+                {
+                    ((Doctor)doctor.getRole()).setSelfHealCount( ((Doctor)doctor.getRole()).getSelfHealCount() + 1 );
+                }
+            }
+        }
+
+        chatRoom.sendToAll(new Chat(new Special(), "Doctor Sleep."));
         return candidate;
     }
 
