@@ -299,6 +299,8 @@ public class God
 
         Player doctorCandidate = doctorRole();
 
+        detectiveRole();
+
         
     }
 
@@ -491,15 +493,14 @@ public class God
                             i++;
                         }
                     }
-                }
-
-                if((candidate.getRole() instanceof DoctorLecter) && (((DoctorLecter)doctorLecter.getRole()).getIsSelfHealed() == true))
-                {
-                    candidate = null;
-                }
-                else if((candidate.getRole() instanceof DoctorLecter) && (((DoctorLecter)doctorLecter.getRole()).getIsSelfHealed() == false))
-                {
-                    ((DoctorLecter)doctorLecter.getRole()).setIsSelfHealed();
+                    if((candidate.getRole() instanceof DoctorLecter) && (((DoctorLecter)doctorLecter.getRole()).getIsSelfHealed() == true))
+                    {
+                        candidate = null;
+                    }
+                    else if((candidate.getRole() instanceof DoctorLecter) && (((DoctorLecter)doctorLecter.getRole()).getIsSelfHealed() == false))
+                    {
+                        ((DoctorLecter)doctorLecter.getRole()).setIsSelfHealed();
+                    }
                 }
             }
         }
@@ -590,21 +591,124 @@ public class God
                         }
                         i++;
                     }
+                    if((candidate.getRole() instanceof Doctor) && (((Doctor)doctor.getRole()).getSelfHealCount() == 2))
+                    {
+                        candidate = null;
+                    }
+                    else if((candidate.getRole() instanceof Doctor) && (((Doctor)doctor.getRole()).getSelfHealCount() < 2))
+                    {
+                        ((Doctor)doctor.getRole()).setSelfHealCount( ((Doctor)doctor.getRole()).getSelfHealCount() + 1 );
+                    }
                 }
 
-                if((candidate.getRole() instanceof Doctor) && (((Doctor)doctor.getRole()).getSelfHealCount() == 2))
-                {
-                    candidate = null;
-                }
-                else if((candidate.getRole() instanceof Doctor) && (((Doctor)doctor.getRole()).getSelfHealCount() < 2))
-                {
-                    ((Doctor)doctor.getRole()).setSelfHealCount( ((Doctor)doctor.getRole()).getSelfHealCount() + 1 );
-                }
             }
         }
 
         chatRoom.sendToAll(new Chat(new Special(), "Doctor Sleep."));
         return candidate;
+    }
+
+    private void detectiveRole()
+    {
+        chatRoom.sendToAll(new Chat(new Special(), "Detective Wake Up."));
+        Player candidate = null;
+
+        Player detective = null;
+        for(Player p : alivePlayers)
+        {
+            if(p.getRole() instanceof Detective)
+            {
+                detective = p;
+            }
+        }
+
+        if(detective== null)
+        {
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 20000));
+            timer.start();
+
+            while(isTimed == false)
+            {
+
+            }
+        }
+        else
+        {
+            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Playes To Detect In 20 Seconds. You Cant Choose Yourself."), detective);
+            chatRoom.sendTo(new Chat(new Special(), alivePlayersToString()), detective);
+            chatRoom.sendTo(new Chat(new Special(), "VOTE"), detective);
+            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), detective);
+
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 20000));
+            timer.start();
+
+            Chat c = null;
+
+            while(isTimed == false)
+            {
+                if(!chatQueue.isEmpty())
+                {
+                    c = chatQueue.popFrontChat();
+                }
+            }
+
+            chatRoom.sendTo(new Chat(new Special(), "MUTE"), detective);
+
+            try 
+            {
+                Thread.sleep(1000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+
+            while(!chatQueue.isEmpty())
+            {
+                c = chatQueue.popFrontChat();            
+            }
+
+            if(c == null)
+            {
+                candidate = null;
+            }
+            else
+            {
+                int k = Integer.parseInt(c.getText());
+
+                if(!((k < 1) || (k > alivePlayersCount)))
+                {
+                    int i = 1;
+                    for(Player player : alivePlayers)
+                    {
+                        if(i == k)
+                        {
+                            candidate = player;
+                        }
+                        i++;
+                    }
+                    if((candidate.getRole() instanceof Detective))
+                    {
+                        candidate = null;
+                    }
+                }
+            }
+        }
+        if(candidate !=null)
+        {
+            if((candidate.getRole() instanceof GodFather) || (candidate.getRole() instanceof Citizen))
+            {
+                chatRoom.sendTo(new Chat(new Special(), "Your Chosen Player Is Citizen."), detective);
+            }
+            else
+            {
+                chatRoom.sendTo(new Chat(new Special(), "Your Chosen Player Is Mafia."), detective);
+            }
+        }
+
+        chatRoom.sendToAll(new Chat(new Special(), "Detective Sleep."));
     }
 
     private boolean mayorRole()
