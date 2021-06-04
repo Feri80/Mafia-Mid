@@ -304,6 +304,8 @@ public class God
         Player sniperCandidate = sniperRole();
 
         Player psychologistCandidate = psychologistRole();
+
+        boolean armoredChoice = armoredRole();
     }
 
     private Player mafiaRole()
@@ -798,6 +800,7 @@ public class God
                     {
                         candidate = sniper;
                     }
+                    ((Sniper)sniper.getRole()).setSnipeCount(((Sniper)sniper.getRole()).getSnipeCount() + 1);
                 }
             }
         }
@@ -811,16 +814,16 @@ public class God
         chatRoom.sendToAll(new Chat(new Special(), "Psychologist Wake Up."));
         Player candidate = null;
 
-        Player doctor = null;
+        Player psychologist = null;
         for(Player p : alivePlayers)
         {
-            if(p.getRole() instanceof Doctor)
+            if(p.getRole() instanceof Psychologist)
             {
-                doctor = p;
+                psychologist = p;
             }
         }
 
-        if(doctor == null)
+        if(psychologist == null)
         {
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
@@ -833,10 +836,10 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Players To Heal In 20 Seconds. You Cant Choose Yourself 3 Times."), doctor);
-            chatRoom.sendTo(new Chat(new Special(), alivePlayersToString()), doctor);
-            chatRoom.sendTo(new Chat(new Special(), "VOTE"), doctor);
-            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), doctor);
+            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Players To Mute In 20 Seconds."), psychologist);
+            chatRoom.sendTo(new Chat(new Special(), alivePlayersToString()), psychologist);
+            chatRoom.sendTo(new Chat(new Special(), "VOTE"), psychologist);
+            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), psychologist);
 
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
@@ -852,7 +855,7 @@ public class God
                 }
             }
 
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), doctor);
+            chatRoom.sendTo(new Chat(new Special(), "MUTE"), psychologist);
 
             try 
             {
@@ -887,22 +890,96 @@ public class God
                         }
                         i++;
                     }
-                    if((candidate.getRole() instanceof Doctor) && (((Doctor)doctor.getRole()).getSelfHealCount() == 2))
-                    {
-                        candidate = null;
-                    }
-                    else if((candidate.getRole() instanceof Doctor) && (((Doctor)doctor.getRole()).getSelfHealCount() < 2))
-                    {
-                        ((Doctor)doctor.getRole()).setSelfHealCount( ((Doctor)doctor.getRole()).getSelfHealCount() + 1 );
-                    }
                 }
-
             }
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Doctor Sleep."));
+        chatRoom.sendToAll(new Chat(new Special(), "Psychologist Sleep."));
         return candidate;
+    }
 
+    private boolean armoredRole() 
+    {
+        chatRoom.sendToAll(new Chat(new Special(), "Armored Wake Up."));
+        Player armored = null;
+        for(Player p : alivePlayers)
+        {
+            if(p.getRole() instanceof Armored)
+            {
+                armored = p;
+            }
+        }
+
+        if(armored == null || ((Armored)armored.getRole()).getInquiryCount() == 2)
+        {
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 20000));
+            timer.start();
+
+            while(isTimed == false)
+            {
+
+            }
+            chatRoom.sendToAll(new Chat(new Special(), "Armored Sleep."));
+            return false;
+        }
+        else
+        {
+            chatRoom.sendTo(new Chat(new Special(), "Armored If Your Want To Have Inquiry Tomorrow Just Send 1\nNote That Your Last Message Will Be Accepted."), armored);
+            
+            chatRoom.sendTo(new Chat(new Special(), "VOTE"), armored);
+            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), armored);
+
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 20000));
+            timer.start();
+
+            Chat c = null;
+
+            while(isTimed == false)
+            {
+                if(!chatQueue.isEmpty())
+                {
+                    c = chatQueue.popFrontChat();
+                }
+            }
+
+            chatRoom.sendTo(new Chat(new Special(), "MUTE"), armored);
+
+            try 
+            {
+                Thread.sleep(1000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+
+            while(!chatQueue.isEmpty())
+            {
+                c = chatQueue.popFrontChat();            
+            }
+
+            if(c == null)
+            {
+                chatRoom.sendToAll(new Chat(new Special(), "Armored Sleep."));
+                return false;
+            }
+            else
+            {
+                if(Integer.parseInt(c.getText()) == 1)
+                {
+                    ((Armored)armored.getRole()).setInquiryCount(((Armored)armored.getRole()).getInquiryCount() + 1);
+                    chatRoom.sendToAll(new Chat(new Special(), "Armored Sleep."));
+                    return true;
+                }
+                else
+                {
+                    chatRoom.sendToAll(new Chat(new Special(), "Armored Sleep."));
+                    return false;
+                }
+            }
+        }
     }
 
     private boolean mayorRole()
