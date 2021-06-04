@@ -4,11 +4,21 @@ import model.logic.God;
 
 public class Sniper extends Citizen
 {
-
+    private int snipeCount;
     
     public Sniper() 
     {
+        this.snipeCount = 0;
+    }
 
+    public int getSnipeCount()
+    {
+        return snipeCount;
+    }
+
+    public void setSnipeCount(int snipeCount)
+    {
+        this.snipeCount = snipeCount;
     }
 
     @Override
