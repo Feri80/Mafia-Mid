@@ -294,10 +294,15 @@ public class God
         chatRoom.sendToAll(new Chat(new Special(), "Night Starts."));
 
         Player mafiasCandidate = mafiaRole();
+
+        Player doctorLecterCandidate = doctorLecterRole();
+
+        Player doctorCandidate = doctorRole();
     }
 
     private Player mafiaRole()
     {
+        chatRoom.sendToAll(new Chat(new Special(), "Mafia Wake Up."));
         Player candidate = null;
 
         for(Player player : mafias)
@@ -395,6 +400,118 @@ public class God
             }
             chatRoom.sendTo(c, mafias);
         }
+
+        chatRoom.sendToAll(new Chat(new Special(), "Mafia Sleep."));
+        return candidate;
+    }
+
+    private Player doctorLecterRole()
+    {
+        chatRoom.sendToAll(new Chat(new Special(), "DoctorLecter Wake Up."));
+        Player candidate = null;
+
+        Player doctorLecter = null;
+        for(Player p : alivePlayers)
+        {
+            if(p.getRole() instanceof DoctorLecter)
+            {
+                doctorLecter = p;
+            }
+        }
+
+        if(doctorLecter == null)
+        {
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 20000));
+            timer.start();
+
+            while(isTimed == false)
+            {
+
+            }
+        }
+        else
+        {
+            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Mafias To Heal In 20 Seconds. You Cant Choose Yourself Twice."), doctorLecter);
+            chatRoom.sendTo(new Chat(new Special(), aliveMafiaToString()), doctorLecter);
+            chatRoom.sendTo(new Chat(new Special(), "VOTE"), doctorLecter);
+            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), doctorLecter);
+
+            Boolean isTimed = false;
+            Thread timer = new Thread(new Timer(isTimed, 20000));
+            timer.start();
+
+            Chat c = null;
+
+            while(isTimed == false)
+            {
+                if(!chatQueue.isEmpty())
+                {
+                    c = chatQueue.popFrontChat();
+                }
+            }
+
+            chatRoom.sendTo(new Chat(new Special(), "MUTE"), doctorLecter);
+
+            try 
+            {
+                Thread.sleep(1000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+
+            while(!chatQueue.isEmpty())
+            {
+                c = chatQueue.popFrontChat();            
+            }
+
+            if(c == null)
+            {
+                candidate = null;
+            }
+            else
+            {
+                int k = Integer.parseInt(c.getText());
+
+                if(!((k < 1) || (k > aliveMafiaCount)))
+                {
+                    int i = 1;
+                    for(Player player : alivePlayers)
+                    {
+                        if(player.getRole() instanceof Mafia)
+                        {
+                            if(i == k)
+                            {
+                                candidate = player;
+                            }
+                            i++;
+                        }
+                    }
+                }
+
+                if((candidate.getRole() instanceof DoctorLecter) && (((DoctorLecter)doctorLecter.getRole()).getIsSelfHealed() == true))
+                {
+                    candidate = null;
+                }
+                else if((candidate.getRole() instanceof DoctorLecter) && (((DoctorLecter)doctorLecter.getRole()).getIsSelfHealed() == false))
+                {
+                    ((DoctorLecter)doctorLecter.getRole()).setIsSelfHealed();
+                }
+            }
+        }
+
+        chatRoom.sendToAll(new Chat(new Special(), "DoctorLecter Sleep."));
+        chatRoom.sendTo(new Chat(new Special(), candidate.toString()), mafias);
+        return candidate;
+    }
+
+    private Player doctorRole()
+    {
+        Player candidate = null;
+
+
 
         return candidate;
     }
@@ -499,6 +616,21 @@ public class God
         for(Player player : alivePlayers)
         {
             if(player.getRole() instanceof Citizen)
+            {
+                s += ANSI_PURPLE + i + ANSI_RESET + " : " + ANSI_BLUE + player.getUserName() + ANSI_RESET + "\n";
+                i++;
+            }
+        }
+        return s;
+    }
+
+    public String aliveMafiaToString()
+    {
+        String s = "";
+        int i = 1;
+        for(Player player : alivePlayers)
+        {
+            if(player.getRole() instanceof Mafia)
             {
                 s += ANSI_PURPLE + i + ANSI_RESET + " : " + ANSI_BLUE + player.getUserName() + ANSI_RESET + "\n";
                 i++;
