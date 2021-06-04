@@ -306,6 +306,8 @@ public class God
         Player psychologistCandidate = psychologistRole();
 
         boolean armoredChoice = armoredRole();
+
+
     }
 
     private Player mafiaRole()
@@ -996,7 +998,7 @@ public class God
         if(mayor == null)
         {
             Boolean isTimed = false;
-            Thread timer = new Thread(new Timer(isTimed, 30000));
+            Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             while(isTimed == false)
@@ -1014,7 +1016,7 @@ public class God
             chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), mayor);
 
             Boolean isTimed = false;
-            Thread timer = new Thread(new Timer(isTimed, 30000));
+            Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             boolean isCanceled = false;
