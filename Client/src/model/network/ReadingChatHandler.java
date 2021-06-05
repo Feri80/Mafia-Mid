@@ -1,7 +1,8 @@
 package model.network;
 
-import model.logic.ClientHandler;
-import model.logic.Special;
+
+import model.network.*;
+import model.logic.*;
 
 
 public class ReadingChatHandler implements Runnable
@@ -21,7 +22,8 @@ public class ReadingChatHandler implements Runnable
             try 
             {
                 Chat chat = (Chat)clientHandler.getObjectInputStream().readObject();
-                if(chat.getSender() instanceof Special)
+                System.out.println("chat got.");
+                if((Player)chat.getSender() instanceof Special)
                 {   
                     if(chat.getText().equals("MUTE"))
                     {
@@ -46,7 +48,7 @@ public class ReadingChatHandler implements Runnable
                 }
                 else
                 {
-                    if(!(chat.getSender().getUserName().equals(clientHandler.getUserName())))
+                    if(!(((Player)chat.getSender()).getUserName().equals(clientHandler.getUserName())))
                     {
                         System.out.println(chat);
                     }
@@ -55,6 +57,14 @@ public class ReadingChatHandler implements Runnable
             catch(Exception e)
             {
                 e.printStackTrace();
+                try 
+                {
+                    Thread.sleep(5000);
+                } 
+                catch (InterruptedException e1) 
+                {
+                    e1.printStackTrace();
+                }
             }
             
         }

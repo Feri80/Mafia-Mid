@@ -5,6 +5,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 
+import model.roles.*;
+
 public class Player implements Serializable
 {
     private String userName;

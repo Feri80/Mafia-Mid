@@ -3,8 +3,11 @@ package model.logic;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
+import model.network.Chat;
 import model.network.ReadingChatHandler;
+import model.network.SendingChatHandler;
 
 public class ClientHandler 
 {
@@ -41,23 +44,45 @@ public class ClientHandler
 
     public void startGame()
     {
-        try 
+        System.out.println(port);
+        try
         {
-            channel = new Socket("localhost",port);
+            channel = new Socket("127.0.0.1", port);
+            System.out.println("Socket Created.");
             objectOutputStream = new ObjectOutputStream(channel.getOutputStream());
             objectInputStream = new ObjectInputStream(channel.getInputStream());
+            System.out.println("Streams Created.");
         } 
         catch (Exception e) 
         {   
             e.printStackTrace();
         }
 
+        System.out.println("Successfully Connected To The Server.");
+
         Thread thread = new Thread(new ReadingChatHandler(this));
         thread.start();
 
+        
         while(true)
         {
-            
+            if(isMuted == false)
+            {
+                if(isVoting == true)
+                {
+
+                }
+                else
+                {
+                    Scanner input = new Scanner(System.in);
+                    String s = input.nextLine();
+                    if(isMuted == false && isVoting == false)
+                    {
+                        Thread thread2 = new Thread(new SendingChatHandler(this, new Chat(new Player(userName, channel, objectOutputStream, objectInputStream), s)));
+                        thread2.start();
+                    }
+                }
+            }
         }
     }
 

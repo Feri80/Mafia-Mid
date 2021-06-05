@@ -1,6 +1,8 @@
 package model.logic;
 
-public class Special extends Player
+import java.io.Serializable;
+
+public class Special extends Player implements Serializable
 {
 
 

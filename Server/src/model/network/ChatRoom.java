@@ -1,6 +1,7 @@
 package model.network;
 
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -69,18 +70,19 @@ public class ChatRoom
 
     public void connect(int port, int playersCount)
     {
-        ExecutorService pool = Executors.newCachedThreadPool();
         int clientCount = 0;
         try(ServerSocket server = new ServerSocket(port)) 
         {
             while(clientCount < playersCount)
             {
                 System.out.println("Server Is Waiting For A New Client.");
-                pool.execute(new ConnectionHandler(server.accept(), this));
+                Socket channel = server.accept();
+                System.out.println("A Socket Created.");
+                Thread thread = new Thread(new ConnectionHandler(channel, this));
+                thread.start();
                 System.out.println("A Client Accepted.");
                 clientCount++;
             }
-            pool.shutdown();
         } 
         catch(Exception e) 
         {
@@ -97,7 +99,7 @@ public class ChatRoom
                 e.printStackTrace();
             }
         }
-        System.out.println("All Client Are Connected.");
+        System.out.println("All Clients Are Connected.");
     }
 
     public ArrayList<Player> getPlayers()

@@ -51,6 +51,7 @@ public class God
 
     public God(int playersCount, int port)
     {
+        this.port = port;
         players = new ArrayList<>();
         alivePlayers = new ArrayList<>();
         citizens = new ArrayList<>();
@@ -75,9 +76,27 @@ public class God
 
     public void startGame()
     {
+        System.out.println(port);
         chatRoom.connect(port, playersCount);
         players = chatRoom.getPlayers();
-        alivePlayers = players;
+        for(Player p : players)
+        {
+            alivePlayers.add(p);
+        }
+        startFirstNight();
+
+        System.out.println("first night completed.");
+
+        chatRoom.readFromAll(chatQueue);
+
+        loop();
+    }
+
+    private void startFirstNight()
+    {
+        System.out.println("First Night Started.");
+        state = "firstNight";
+        setRoles();
         for(Player player : players)
         {
             if(player.getRole() instanceof Mafia)
@@ -89,19 +108,49 @@ public class God
                 citizens.add(player);
             }
         }
-        startFirstNight();
-        chatRoom.readFromAll(chatQueue);
-        loop();
-    }
+        System.out.println("Set Roles Completed.");
 
-    private void startFirstNight()
-    {
-        state = "firstNight";
-        setRoles();
         sendRoles();
+
+        System.out.println("Send Roles Completed.");
+
+        try 
+        {
+            Thread.sleep(5000);
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+
         mafiasIntroduction();
+
+        System.out.println("mafias intoduction completed.");
+
+        try 
+        {
+            Thread.sleep(5000);
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+
         introduceDoctorToMayor();
+
+        System.out.println("introduction to mayor completed");
+
+        try 
+        {
+            Thread.sleep(5000);
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+
         chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
+
         try 
         {
             Thread.sleep(10000);
@@ -1286,24 +1335,31 @@ public class God
         if(aliveMafiaCount == 0)
         {   
             chatRoom.sendToAll(new Chat(new Special(), "Congrats To All Citizens \n  Citizen Won The Game."));
+            chatRoom.sendToAll(new Chat(new Special(), "END"));
+            try 
+            {
+                Thread.sleep(1000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+            System.exit(0);
         }
         else if(aliveMafiaCount == (alivePlayersCount - aliveMafiaCount))
         {
             chatRoom.sendToAll(new Chat(new Special(), "Congrats To All Mafias \n  Mafia Won The Game."));
+            chatRoom.sendToAll(new Chat(new Special(), "END"));
+            try 
+            {
+                Thread.sleep(1000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+            System.exit(0);
         }
-
-        chatRoom.sendToAll(new Chat(new Special(), "END"));
-
-        try 
-        {
-            Thread.sleep(1000);
-        } 
-        catch (InterruptedException e) 
-        {
-            e.printStackTrace();
-        }
-
-        System.exit(0);
     }
     
     private void setRoles()
@@ -1342,7 +1398,7 @@ public class God
     {
         for(Player player : players)
         {
-            chatRoom.sendTo(new Chat(new Special(), player.getUserName() + "Your Role Is : " + player.getRole()), player);
+            chatRoom.sendTo(new Chat(new Special(), player.getUserName() + " Your Role Is : " + player.getRole().toString()), player);
         }
     }
     
