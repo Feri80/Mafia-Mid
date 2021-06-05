@@ -127,6 +127,52 @@ public class God
 
         chatRoom.sendToAll(new Chat(new Special(), "Day Starts You Can Wake Up."));
 
+        if(inquiryCheck == true)
+        {
+            inquiryCheck = false;
+
+            int killed = playersCount - alivePlayersCount;
+
+            int mafiaKilled = mafias.size() - aliveMafiaCount;
+
+            int citizenKilled = killed - mafiaKilled;
+
+            chatRoom.sendToAll(new Chat(new Special(), killed + "Players Killed " + mafiaKilled + " Mafias  & " + citizenKilled + " Citizens.");
+            
+            try 
+            {
+                Thread.sleep(5000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(nightKills.isEmpty() == true)
+        {
+            chatRoom.sendToAll(new Chat(new Special(), "No One Killed Last Night");
+        }
+        else
+        {
+            String s = nightKills.size() + " Players Killed Last Night \n ";
+            for(Player p : nightKills)
+            {
+                s += p.getUserName() + "\n";
+            }
+            chatRoom.sendToAll(new Chat(new Special(), s));
+            nightKills.clear();
+        }
+
+        try 
+        {
+            Thread.sleep(5000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
         chatRoom.sendToAllAlive(new Chat(new Special(), "FREE"));
         chatRoom.sendToAllAlive(new Chat(new Special(), "UNMUTE"));
 
