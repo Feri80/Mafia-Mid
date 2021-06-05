@@ -29,6 +29,12 @@ public class God
 
     private HashMap<Player, Player> votes;
 
+    private ArrayList<Player> nightKills;
+
+    private Player forceMute;
+
+    private boolean inquiryCheck;
+
     private int playersCount;
 
     private int alivePlayersCount;
@@ -50,6 +56,7 @@ public class God
         citizens = new ArrayList<>();
         mafias = new ArrayList<>();
         votes = new HashMap<>();
+        nightKills = new ArrayList<>();
         this.playersCount = playersCount;
         alivePlayersCount = playersCount;
         if(playersCount <= 7)
@@ -63,6 +70,7 @@ public class God
         chatRoom = new ChatRoom();
         chatQueue = new ChatQueue();
         state = "trash";
+        inquiryCheck = false;
     }
 
     public void startGame()
@@ -307,7 +315,59 @@ public class God
 
         boolean armoredChoice = armoredRole();
 
+        inquiryCheck = false;
 
+        inquiryCheck = armoredChoice;
+
+        forceMute = null;
+        
+        forceMute = psychologistCandidate;
+
+        nightKills.clear();
+
+        if(sniperCandidate.getRole() instanceof Sniper)
+        {
+            nightKills.add(sniperCandidate);
+            sniperCandidate.setIsAlive(false);
+            alivePlayersCount--;
+            alivePlayers.remove(sniperCandidate);
+        }
+        else if(!(sniperCandidate.getUserName().equals(doctorLecterCandidate.getUserName())))
+        {
+            nightKills.add(sniperCandidate);
+            sniperCandidate.setIsAlive(false);
+            alivePlayersCount--;
+            alivePlayers.remove(sniperCandidate);
+            if(sniperCandidate.getRole() instanceof Mafia)
+            {
+                aliveMafiaCount--;
+            }
+        }
+
+        if((mafiasCandidate.getRole() instanceof Armored) && ((Armored)mafiasCandidate.getRole()).getIsArmored() == true)
+        {
+            ((Armored)mafiasCandidate.getRole()).brokeArmor();
+        }
+        else if(!(mafiasCandidate.getUserName().equals(doctorCandidate.getUserName())))
+        {
+            nightKills.add(mafiasCandidate);
+            mafiasCandidate.setIsAlive(false);
+            alivePlayersCount--;
+            alivePlayers.remove(mafiasCandidate);
+        }
+
+        chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
+
+        try 
+        {
+            Thread.sleep(10000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
+        state = "trash";
     }
 
     private Player mafiaRole()
