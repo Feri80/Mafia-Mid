@@ -137,7 +137,7 @@ public class God
 
             int citizenKilled = killed - mafiaKilled;
 
-            chatRoom.sendToAll(new Chat(new Special(), killed + "Players Killed " + mafiaKilled + " Mafias  & " + citizenKilled + " Citizens.");
+            chatRoom.sendToAll(new Chat(new Special(), killed + "Players Killed " + mafiaKilled + " Mafias  & " + citizenKilled + " Citizens."));
             
             try 
             {
@@ -151,7 +151,7 @@ public class God
 
         if(nightKills.isEmpty() == true)
         {
-            chatRoom.sendToAll(new Chat(new Special(), "No One Killed Last Night");
+            chatRoom.sendToAll(new Chat(new Special(), "No One Killed Last Night"));
         }
         else
         {
