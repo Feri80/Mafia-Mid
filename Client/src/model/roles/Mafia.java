@@ -4,8 +4,8 @@ import model.logic.ClientHandler;
 
 public class Mafia extends Role
 {
-    
 
+    
     public Mafia()
     {
 

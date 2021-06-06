@@ -33,6 +33,8 @@ public class God
 
     private Player forceMute;
 
+    private Player headOfMafia;
+
     private boolean inquiryCheck;
 
     private int playersCount;
@@ -51,27 +53,29 @@ public class God
 
     public God(int playersCount, int port)
     {
-        this.port = port;
-        players = new ArrayList<>();
-        alivePlayers = new ArrayList<>();
-        citizens = new ArrayList<>();
-        mafias = new ArrayList<>();
-        votes = new HashMap<>();
-        nightKills = new ArrayList<>();
+        this.players = new ArrayList<>();
+        this.alivePlayers = new ArrayList<>();
+        this.citizens = new ArrayList<>();
+        this.mafias = new ArrayList<>();
+        this.votes = new HashMap<>();
+        this.nightKills = new ArrayList<>();
+        this.forceMute = null;
+        this.headOfMafia = null;
+        this.inquiryCheck = false;
         this.playersCount = playersCount;
-        alivePlayersCount = playersCount;
+        this.alivePlayersCount = playersCount;
         if(playersCount <= 7)
         {
-            aliveMafiaCount = 1;
+            this.aliveMafiaCount = 1;
         }
         else
         {
-            aliveMafiaCount = playersCount / 3;
+            this.aliveMafiaCount = playersCount / 3;
         }
+        this.port = port;
         chatRoom = new ChatRoom();
         chatQueue = new ChatQueue();
         state = "trash";
-        inquiryCheck = false;
     }
 
     public void startGame()
@@ -94,11 +98,15 @@ public class God
 
     private void startFirstNight()
     {
-        System.out.println("First Night Started.");
+        System.out.println("first night started.");
         state = "firstNight";
         setRoles();
         for(Player player : players)
         {
+            if(player.getRole() instanceof GodFather)
+            {
+                headOfMafia = player;
+            }
             if(player.getRole() instanceof Mafia)
             {
                 mafias.add(player);
@@ -108,11 +116,11 @@ public class God
                 citizens.add(player);
             }
         }
-        System.out.println("Set Roles Completed.");
+        System.out.println("set roles completed.");
 
         sendRoles();
 
-        System.out.println("Send Roles Completed.");
+        System.out.println("send roles completed.");
 
         try 
         {
@@ -364,6 +372,10 @@ public class God
             else
             {
                 chatRoom.sendToAll(new Chat(new Special(), "Mayor Accepted The Voting."));
+                if(candidate.getUserName().equals(headOfMafia.getUserName()))
+                {
+                    changeHeadOfMafia();
+                }
                 candidate.setIsAlive(false);
                 alivePlayersCount--;
                 alivePlayers.remove(candidate);
@@ -429,6 +441,10 @@ public class God
         }
         else if(!(sniperCandidate.getUserName().equals(doctorLecterCandidate.getUserName())))
         {
+            if(sniperCandidate.getUserName().equals(headOfMafia.getUserName()))
+            {
+                changeHeadOfMafia();
+            }
             nightKills.add(sniperCandidate);
             sniperCandidate.setIsAlive(false);
             alivePlayersCount--;
@@ -474,7 +490,7 @@ public class God
         {
             if(player.getIsAlive() == true)
             {
-                chatRoom.sendTo(new Chat(new Special(), "Voting Please Choose One Of The Valid Choices In 20 Seconds.\n Just GodFather Vote Is Effective."), player);
+                chatRoom.sendTo(new Chat(new Special(), "Voting Please Choose One Of The Valid Choices In 20 Seconds.\n Just Head Of Mafia's Vote Is Effective."), player);
                 chatRoom.sendTo(new Chat(new Special(), aliveCitizenToString()), player);
                 chatRoom.sendTo(new Chat(new Special(), "VOTE"), player);
                 chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), player);
@@ -499,7 +515,7 @@ public class God
             if(!chatQueue.isEmpty())
             {
                 Chat c = chatQueue.popFrontChat();
-                if(c.getSender().getRole() instanceof GodFather)
+                if(c.getSender().getUserName().equals(headOfMafia.getUserName()))
                 {
                     int k = Integer.parseInt(c.getText());
                     if(!((k < 1) || (k > aliveCitizenCount)))
@@ -543,7 +559,7 @@ public class God
         while(!chatQueue.isEmpty())
         {
             Chat c = chatQueue.popFrontChat();
-            if(c.getSender().getRole() instanceof GodFather)
+            if(c.getSender().getUserName().equals(headOfMafia.getUserName()))
             {
                 int k = Integer.parseInt(c.getText());
                 if(!((k < 1) || (k > aliveCitizenCount)))
@@ -1438,6 +1454,25 @@ public class God
                 }
             }
         }
+    }
+
+    private void changeHeadOfMafia()
+    {
+        ArrayList<Player> candidateMafias = new ArrayList<>();
+        for(Player p : mafias)
+        {
+            if((p.getIsAlive() == true) && !(p.getUserName().equals(headOfMafia.getUserName())))
+            {
+                candidateMafias.add(p);
+            }
+        }
+        if(candidateMafias.size() == 0)
+        {
+            return;
+        }
+        Collections.shuffle(candidateMafias);
+        headOfMafia = candidateMafias.get(0);
+        chatRoom.sendTo(new Chat(new Special(), headOfMafia.getUserName() + " Is New Head Of Mafia."), mafias);
     }
 
     public ArrayList<Player> getPlayers()
