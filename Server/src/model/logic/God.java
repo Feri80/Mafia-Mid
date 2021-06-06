@@ -234,7 +234,7 @@ public class God
         chatRoom.sendToAllAlive(new Chat(new Special(), "UNMUTE"));
 
         Boolean isTimed = false;
-        Thread timer = new Thread(new Timer(isTimed, 180000));
+        Thread timer = new Thread(new Timer(isTimed, 300000));
         timer.start();
 
         while(isTimed == false)
