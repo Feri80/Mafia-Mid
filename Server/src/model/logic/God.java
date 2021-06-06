@@ -232,6 +232,12 @@ public class God
 
         chatRoom.sendToAllAlive(new Chat(new Special(), "FREE"));
         chatRoom.sendToAllAlive(new Chat(new Special(), "UNMUTE"));
+        if(forceMute != null)
+        {
+            chatRoom.sendTo(new Chat(new Special(), "MUTE"), forceMute);
+            chatRoom.sendToAll(new Chat(new Special(), forceMute + " Is Muted In This Day."));
+            forceMute = null;
+        }
 
         Boolean isTimed = false;
         Thread timer = new Thread(new Timer(isTimed, 300000));
