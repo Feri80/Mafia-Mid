@@ -41,6 +41,10 @@ public class ReadingChatHandler implements Runnable
                     {
                         clientHandler.setIsVoting(false);
                     }
+                    else if(chat.getText().equals("END"))
+                    {
+                        System.exit(0);
+                    }
                     else
                     {
                         System.out.println(chat);

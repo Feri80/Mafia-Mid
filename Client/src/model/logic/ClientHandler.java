@@ -3,6 +3,7 @@ package model.logic;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import model.network.Chat;
@@ -70,7 +71,20 @@ public class ClientHandler
             {
                 if(isVoting == true)
                 {
-
+                    Scanner input = new Scanner(System.in);
+                    try 
+                    {
+                        int k = input.nextInt();
+                        if(isMuted == false && isVoting == true)
+                        {
+                            Thread thread2 = new Thread(new SendingChatHandler(this, new Chat(new Player(userName, channel, objectOutputStream, objectInputStream), String.valueOf(k))));
+                            thread2.start();
+                        }
+                    } 
+                    catch (InputMismatchException e) 
+                    {
+                        System.out.println("Voting State !!! Please Insert A Number.");
+                    }
                 }
                 else
                 {
@@ -78,8 +92,8 @@ public class ClientHandler
                     String s = input.nextLine();
                     if(isMuted == false && isVoting == false)
                     {
-                        Thread thread2 = new Thread(new SendingChatHandler(this, new Chat(new Player(userName, channel, objectOutputStream, objectInputStream), s)));
-                        thread2.start();
+                        Thread thread3 = new Thread(new SendingChatHandler(this, new Chat(new Player(userName, channel, objectOutputStream, objectInputStream), s)));
+                        thread3.start();
                     }
                 }
             }
