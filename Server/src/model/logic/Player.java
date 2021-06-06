@@ -11,15 +11,15 @@ public class Player implements Serializable
 {
     private String userName;
 
-    private transient boolean isAlive;
+    private boolean isAlive;
 
-    private transient Role role;
+    private Role role;
 
-    private transient Socket channel;
+    private Socket channel;
 
-    private transient ObjectOutputStream objectOutputStream;
+    private ObjectOutputStream objectOutputStream;
 
-    private transient ObjectInputStream objectInputStream;
+    private ObjectInputStream objectInputStream;
 
 
     public Player(String userName, Socket channel, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream)

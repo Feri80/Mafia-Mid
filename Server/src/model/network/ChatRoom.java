@@ -3,8 +3,6 @@ package model.network;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import model.logic.*;
 
@@ -24,9 +22,9 @@ public class ChatRoom
         chats = new ArrayList<>();
     }
 
-    public void readFrom(Player sender, ChatQueue chatQueue)
+    public void readFrom(Player player, ChatQueue chatQueue)
     {
-        Thread thread = new Thread(new ReadingChatHandler(sender, chatQueue));
+        Thread thread = new Thread(new ReadingChatHandler(player, chatQueue));
         thread.start();
     }
 
@@ -83,12 +81,20 @@ public class ChatRoom
                 System.out.println("A Client Accepted.");
                 clientCount++;
             }
+            try 
+            {
+                Thread.sleep(3000);
+            } 
+            catch (InterruptedException e) 
+            {
+                e.printStackTrace();
+            }
         } 
         catch(Exception e) 
         {
             e.printStackTrace();
         }
-        while(players.size() < playersCount)
+        while(this.players.size() < playersCount)
         {
             try 
             {

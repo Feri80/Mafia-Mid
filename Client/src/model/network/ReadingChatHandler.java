@@ -22,9 +22,9 @@ public class ReadingChatHandler implements Runnable
             try 
             {
                 Chat chat = (Chat)clientHandler.getObjectInputStream().readObject();
-                System.out.println("chat got.");
-                if((Player)chat.getSender() instanceof Special)
+                if(chat.getSender().equals("SPECIAL"))
                 {   
+                    System.out.println("Special Chat Got.");
                     if(chat.getText().equals("MUTE"))
                     {
                         clientHandler.setIsMuted(true);
@@ -45,6 +45,10 @@ public class ReadingChatHandler implements Runnable
                     {
                         System.exit(0);
                     }
+                    else if(chat.getText().toCharArray()[0] == '#')
+                    {
+                        clientHandler.setUserName(chat.getText().substring(1));
+                    }
                     else
                     {
                         System.out.println(chat);
@@ -52,7 +56,8 @@ public class ReadingChatHandler implements Runnable
                 }
                 else
                 {
-                    if(!(((Player)chat.getSender()).getUserName().equals(clientHandler.getUserName())))
+                    System.out.println("Non Special Chat Got.");
+                    if(!(chat.getSender().equals(clientHandler.getUserName())))
                     {
                         System.out.println(chat);
                     }
@@ -60,15 +65,9 @@ public class ReadingChatHandler implements Runnable
             } 
             catch(Exception e)
             {
+                System.out.println("Reading Error.");
                 e.printStackTrace();
-                try 
-                {
-                    Thread.sleep(5000);
-                } 
-                catch (InterruptedException e1) 
-                {
-                    e1.printStackTrace();
-                }
+                
             }
             
         }

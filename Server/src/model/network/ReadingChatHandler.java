@@ -25,10 +25,12 @@ public class ReadingChatHandler implements Runnable
             try 
             {
                 Chat chat = (Chat)player.getObjectInputStream().readObject();
+                System.out.println(chat);
                 chatQueue.pushBackChat(chat);
             } 
             catch(ClassNotFoundException | IOException e) 
             {
+                System.out.println("reading chat error.");
                 e.printStackTrace();
             }
         }

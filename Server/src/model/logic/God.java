@@ -80,13 +80,17 @@ public class God
 
     public void startGame()
     {
-        System.out.println(port);
+        System.out.println("server port : " + port);
+
         chatRoom.connect(port, playersCount);
+
         players = chatRoom.getPlayers();
+
         for(Player p : players)
         {
             alivePlayers.add(p);
         }
+
         startFirstNight();
 
         System.out.println("first night completed.");
@@ -99,8 +103,11 @@ public class God
     private void startFirstNight()
     {
         System.out.println("first night started.");
+
         state = "firstNight";
+
         setRoles();
+
         for(Player player : players)
         {
             if(player.getRole() instanceof GodFather)
@@ -116,6 +123,7 @@ public class God
                 citizens.add(player);
             }
         }
+
         System.out.println("set roles completed.");
 
         sendRoles();
@@ -157,7 +165,7 @@ public class God
             e.printStackTrace();
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Day Starts In 10 Seconds."));
 
         try 
         {
@@ -182,7 +190,7 @@ public class God
     {
         state = "day";
 
-        chatRoom.sendToAll(new Chat(new Special(), "Day Starts You Can Wake Up."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Day Starts You Can Wake Up."));
 
         if(inquiryCheck == true)
         {
@@ -194,7 +202,7 @@ public class God
 
             int citizenKilled = killed - mafiaKilled;
 
-            chatRoom.sendToAll(new Chat(new Special(), killed + "Players Killed " + mafiaKilled + " Mafias  & " + citizenKilled + " Citizens."));
+            chatRoom.sendToAll(new Chat("SPECIAL", killed + " Players Killed : " + mafiaKilled + " Mafias & " + citizenKilled + " Citizens."));
             
             try 
             {
@@ -208,7 +216,7 @@ public class God
 
         if(nightKills.isEmpty() == true)
         {
-            chatRoom.sendToAll(new Chat(new Special(), "No One Killed Last Night"));
+            chatRoom.sendToAll(new Chat("SPECIAL", "No One Killed Last Night"));
         }
         else
         {
@@ -217,7 +225,7 @@ public class God
             {
                 s += p.getUserName() + "\n";
             }
-            chatRoom.sendToAll(new Chat(new Special(), s));
+            chatRoom.sendToAll(new Chat("SPECIAL", s));
             nightKills.clear();
         }
 
@@ -230,18 +238,21 @@ public class God
             e.printStackTrace();
         }
 
-        chatRoom.sendToAllAlive(new Chat(new Special(), "FREE"));
-        chatRoom.sendToAllAlive(new Chat(new Special(), "UNMUTE"));
+        chatRoom.sendToAllAlive(new Chat("SPECIAL", "FREE"));
+        chatRoom.sendToAllAlive(new Chat("SPECIAL", "UNMUTE"));
+
         if(forceMute != null)
         {
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), forceMute);
-            chatRoom.sendToAll(new Chat(new Special(), forceMute + " Is Muted In This Day."));
+            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), forceMute);
+            chatRoom.sendToAll(new Chat("SPECIAL", forceMute.toString() + " Is Muted In This Day."));
             forceMute = null;
         }
 
         Boolean isTimed = false;
         Thread timer = new Thread(new Timer(isTimed, 300000));
         timer.start();
+
+        System.out.println("chat started.");
 
         while(isTimed == false)
         {
@@ -251,7 +262,7 @@ public class God
             }
         }
 
-        chatRoom.sendToAllAlive(new Chat(new Special(), "MUTE"));
+        chatRoom.sendToAllAlive(new Chat("SPECIAL", "MUTE"));
 
         try 
         {
@@ -267,7 +278,7 @@ public class God
             chatRoom.sendToAll(chatQueue.popFrontChat());
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Voting Starts In 10 Seconds."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Voting Starts In 10 Seconds."));
 
         try 
         {
@@ -285,11 +296,11 @@ public class God
     {
         state = "vote";
 
-        chatRoom.sendToAll(new Chat(new Special(), "Voting Please Choose One Of The Valid Choices In 30 Seconds."));
-        chatRoom.sendToAll(new Chat(new Special(), alivePlayersToString()));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Voting Please Choose One Of The Valid Choices In 30 Seconds."));
+        chatRoom.sendToAll(new Chat("SPECIAL", alivePlayersToString()));
 
-        chatRoom.sendToAllAlive(new Chat(new Special(), "VOTE"));
-        chatRoom.sendToAllAlive(new Chat(new Special(), "UNMUTE"));
+        chatRoom.sendToAllAlive(new Chat("SPECIAL", "VOTE"));
+        chatRoom.sendToAllAlive(new Chat("SPECIAL", "UNMUTE"));
 
         Boolean isTimed = false;
         Thread timer = new Thread(new Timer(isTimed, 30000));
@@ -300,14 +311,20 @@ public class God
             if(!chatQueue.isEmpty())
             {
                 Chat c = chatQueue.popFrontChat();
-                if(!((Integer.parseInt(c.getText()) < 1) || (Integer.parseInt(c.getText()) > alivePlayersCount)))
+                if(!( (Integer.parseInt(c.getText()) < 1) || (Integer.parseInt(c.getText()) > alivePlayersCount) ))
                 {
-                    votes.put(c.getSender(), alivePlayers.get( ( Integer.parseInt(c.getText()) - 1) ));
+                    for(Player p : alivePlayers)
+                    {
+                        if(p.getUserName().equals(c.getSender()))
+                        {
+                            votes.put(p, alivePlayers.get( ( Integer.parseInt(c.getText()) - 1) ));
+                        }
+                    }
                 }
             }
         }
 
-        chatRoom.sendToAllAlive(new Chat(new Special(), "MUTE"));
+        chatRoom.sendToAllAlive(new Chat("SPECIAL", "MUTE"));
 
         try 
         {
@@ -321,9 +338,15 @@ public class God
         while(!chatQueue.isEmpty())
         {
             Chat c = chatQueue.popFrontChat();
-            if(!((Integer.parseInt(c.getText()) < 1) || (Integer.parseInt(c.getText()) > alivePlayersCount)))
+            if(!( (Integer.parseInt(c.getText()) < 1) || (Integer.parseInt(c.getText()) > alivePlayersCount) ))
             {
-                votes.put(c.getSender(), alivePlayers.get( ( Integer.parseInt(c.getText()) - 1) ));
+                for(Player p : alivePlayers)
+                {
+                    if(p.getUserName().equals(c.getSender()))
+                    {
+                        votes.put(p, alivePlayers.get( ( Integer.parseInt(c.getText()) - 1) ));
+                    }
+                }
             }
         }
 
@@ -336,7 +359,7 @@ public class God
             e.printStackTrace();
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), votersToString()));
+        chatRoom.sendToAll(new Chat("SPECIAL", votersToString()));
 
         try 
         {
@@ -347,7 +370,7 @@ public class God
             e.printStackTrace();
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), votesToString()));
+        chatRoom.sendToAll(new Chat("SPECIAL", votesToString()));
         
         try 
         {
@@ -360,24 +383,24 @@ public class God
 
         Player candidate = findKillCandidate();
 
-        
-
         if(candidate == null)
         {
-            chatRoom.sendToAll(new Chat(new Special(), "No One Will Be Killed."));
+            chatRoom.sendToAll(new Chat("SPECIAL", "No One Will Be Killed."));
         }
         else
         {
-            chatRoom.sendToAll(new Chat(new Special(), candidate.getUserName() + " Will Be Killed."));
-            chatRoom.sendToAll(new Chat(new Special(), "It Is Mayor's Time To Play."));
+            chatRoom.sendToAll(new Chat("SPECIAL", candidate.getUserName() + " Will Be Killed."));
+            chatRoom.sendToAll(new Chat("SPECIAL", "It Is Mayor's Time To Play."));
+
             boolean isCanceled = mayorRole();
+
             if(isCanceled == true)
             {
-                chatRoom.sendToAll(new Chat(new Special(), "Mayor Canceled The Voting. No One Will Be Killed."));
+                chatRoom.sendToAll(new Chat("SPECIAL", "Mayor Canceled The Voting. No One Will Be Killed."));
             }
             else
             {
-                chatRoom.sendToAll(new Chat(new Special(), "Mayor Accepted The Voting."));
+                chatRoom.sendToAll(new Chat("SPECIAL", "Mayor Accepted The Voting."));
                 if(candidate.getUserName().equals(headOfMafia.getUserName()))
                 {
                     changeHeadOfMafia();
@@ -394,7 +417,7 @@ public class God
 
         votes.clear();
 
-        chatRoom.sendToAll(new Chat(new Special(), "Night Starts In 10 Seconds."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Night Starts In 10 Seconds."));
 
         try 
         {
@@ -412,7 +435,7 @@ public class God
     {
         state = "night";
 
-        chatRoom.sendToAll(new Chat(new Special(), "Night Starts."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Night Starts."));
 
         Player mafiasCandidate = mafiaRole();
 
@@ -473,7 +496,7 @@ public class God
             alivePlayers.remove(mafiasCandidate);
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Day Starts In 10 Seconds."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Day Starts In 10 Seconds."));
 
         try 
         {
@@ -489,23 +512,19 @@ public class God
 
     private Player mafiaRole()
     {
-        chatRoom.sendToAll(new Chat(new Special(), "Mafia Wake Up."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Mafia Wake Up."));
         Player candidate = null;
 
         for(Player player : mafias)
         {
             if(player.getIsAlive() == true)
             {
-                chatRoom.sendTo(new Chat(new Special(), "Voting Please Choose One Of The Valid Choices In 20 Seconds.\n Just Head Of Mafia's Vote Is Effective."), player);
-                chatRoom.sendTo(new Chat(new Special(), aliveCitizenToString()), player);
-                chatRoom.sendTo(new Chat(new Special(), "VOTE"), player);
-                chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), player);
+                chatRoom.sendTo(new Chat("SPECIAL", "Voting Please Choose One Of The Valid Choices In 20 Seconds.\n Just Head Of Mafia's Vote Is Effective."), player);
+                chatRoom.sendTo(new Chat("SPECIAL", aliveCitizenToString()), player);
+                chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), player);
+                chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), player);
             }
         }
-
-        Boolean isTimed = false;
-        Thread timer = new Thread(new Timer(isTimed, 20000));
-        timer.start();
 
         int aliveCitizenCount = 0;
         for(Player player : alivePlayers)
@@ -515,13 +534,17 @@ public class God
                 aliveCitizenCount++;
             }
         }
+
+        Boolean isTimed = false;
+        Thread timer = new Thread(new Timer(isTimed, 20000));
+        timer.start();
         
         while(isTimed == false)
         {
             if(!chatQueue.isEmpty())
             {
                 Chat c = chatQueue.popFrontChat();
-                if(c.getSender().getUserName().equals(headOfMafia.getUserName()))
+                if(c.getSender().equals(headOfMafia.getUserName()))
                 {
                     int k = Integer.parseInt(c.getText());
                     if(!((k < 1) || (k > aliveCitizenCount)))
@@ -549,7 +572,7 @@ public class God
         {
             if(player.getIsAlive() == true)
             {
-                chatRoom.sendTo(new Chat(new Special(), "MUTE"), player);
+                chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), player);
             }
         }
 
@@ -565,7 +588,7 @@ public class God
         while(!chatQueue.isEmpty())
         {
             Chat c = chatQueue.popFrontChat();
-            if(c.getSender().getUserName().equals(headOfMafia.getUserName()))
+            if(c.getSender().equals(headOfMafia.getUserName()))
             {
                 int k = Integer.parseInt(c.getText());
                 if(!((k < 1) || (k > aliveCitizenCount)))
@@ -588,13 +611,14 @@ public class God
             chatRoom.sendTo(c, mafias);
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Mafia Sleep."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Mafia Sleep."));
         return candidate;
     }
 
     private Player doctorLecterRole()
     {
-        chatRoom.sendToAll(new Chat(new Special(), "DoctorLecter Wake Up."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "DoctorLecter Wake Up."));
+
         Player candidate = null;
 
         Player doctorLecter = null;
@@ -619,10 +643,10 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Mafias To Heal In 20 Seconds. You Cant Choose Yourself Twice."), doctorLecter);
-            chatRoom.sendTo(new Chat(new Special(), aliveMafiaToString()), doctorLecter);
-            chatRoom.sendTo(new Chat(new Special(), "VOTE"), doctorLecter);
-            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), doctorLecter);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Mafias To Heal In 20 Seconds. You Cant Choose Yourself Twice."), doctorLecter);
+            chatRoom.sendTo(new Chat("SPECIAL", aliveMafiaToString()), doctorLecter);
+            chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), doctorLecter);
+            chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), doctorLecter);
 
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
@@ -638,7 +662,7 @@ public class God
                 }
             }
 
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), doctorLecter);
+            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), doctorLecter);
 
             try 
             {
@@ -688,14 +712,15 @@ public class God
             }
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "DoctorLecter Sleep."));
-        chatRoom.sendTo(new Chat(new Special(), candidate.toString()), mafias);
+        chatRoom.sendToAll(new Chat("SPECIAL", "DoctorLecter Sleep."));
+        chatRoom.sendTo(new Chat("SPECIAL", candidate.toString()), mafias);
         return candidate;
     }
 
     private Player doctorRole()
     {
-        chatRoom.sendToAll(new Chat(new Special(), "Doctor Wake Up."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Doctor Wake Up."));
+
         Player candidate = null;
 
         Player doctor = null;
@@ -720,10 +745,10 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Players To Heal In 20 Seconds. You Cant Choose Yourself 3 Times."), doctor);
-            chatRoom.sendTo(new Chat(new Special(), alivePlayersToString()), doctor);
-            chatRoom.sendTo(new Chat(new Special(), "VOTE"), doctor);
-            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), doctor);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Heal In 20 Seconds. You Cant Choose Yourself 3 Times."), doctor);
+            chatRoom.sendTo(new Chat("SPECIAL", alivePlayersToString()), doctor);
+            chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), doctor);
+            chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), doctor);
 
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
@@ -739,7 +764,7 @@ public class God
                 }
             }
 
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), doctor);
+            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), doctor);
 
             try 
             {
@@ -787,13 +812,14 @@ public class God
             }
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Doctor Sleep."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Doctor Sleep."));
         return candidate;
     }
 
     private void detectiveRole()
     {
-        chatRoom.sendToAll(new Chat(new Special(), "Detective Wake Up."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Detective Wake Up."));
+
         Player candidate = null;
 
         Player detective = null;
@@ -818,10 +844,10 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Players To Detect In 20 Seconds. You Cant Choose Yourself."), detective);
-            chatRoom.sendTo(new Chat(new Special(), alivePlayersToString()), detective);
-            chatRoom.sendTo(new Chat(new Special(), "VOTE"), detective);
-            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), detective);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Detect In 20 Seconds. You Cant Choose Yourself."), detective);
+            chatRoom.sendTo(new Chat("SPECIAL", alivePlayersToString()), detective);
+            chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), detective);
+            chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), detective);
 
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
@@ -837,7 +863,7 @@ public class God
                 }
             }
 
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), detective);
+            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), detective);
 
             try 
             {
@@ -879,24 +905,26 @@ public class God
                 }
             }
         }
-        if(candidate !=null)
+
+        if(candidate != null)
         {
             if((candidate.getRole() instanceof GodFather) || (candidate.getRole() instanceof Citizen))
             {
-                chatRoom.sendTo(new Chat(new Special(), "Your Chosen Player Is Citizen."), detective);
+                chatRoom.sendTo(new Chat("SPECIAL", "Your Chosen Player Is Citizen."), detective);
             }
             else
             {
-                chatRoom.sendTo(new Chat(new Special(), "Your Chosen Player Is Mafia."), detective);
+                chatRoom.sendTo(new Chat("SPECIAL", "Your Chosen Player Is Mafia."), detective);
             }
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Detective Sleep."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Detective Sleep."));
     }
 
     private Player sniperRole()
     {
-        chatRoom.sendToAll(new Chat(new Special(), "Sniper Wake Up."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Sniper Wake Up."));
+
         Player candidate = null;
 
         Player sniper = null;
@@ -921,10 +949,10 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Players To Snipe In 20 Seconds."), sniper);
-            chatRoom.sendTo(new Chat(new Special(), alivePlayersToString()), sniper);
-            chatRoom.sendTo(new Chat(new Special(), "VOTE"), sniper);
-            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), sniper);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Snipe In 20 Seconds."), sniper);
+            chatRoom.sendTo(new Chat("SPECIAL", alivePlayersToString()), sniper);
+            chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), sniper);
+            chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), sniper);
 
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
@@ -940,7 +968,7 @@ public class God
                 }
             }
 
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), sniper);
+            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), sniper);
 
             try 
             {
@@ -984,13 +1012,14 @@ public class God
             }
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Sniper Sleep."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Sniper Sleep."));
         return candidate;
     }
 
     private Player psychologistRole() 
     {
-        chatRoom.sendToAll(new Chat(new Special(), "Psychologist Wake Up."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Psychologist Wake Up."));
+
         Player candidate = null;
 
         Player psychologist = null;
@@ -1015,10 +1044,10 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat(new Special(), "Please Choose One Of The Players To Mute In 20 Seconds."), psychologist);
-            chatRoom.sendTo(new Chat(new Special(), alivePlayersToString()), psychologist);
-            chatRoom.sendTo(new Chat(new Special(), "VOTE"), psychologist);
-            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), psychologist);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Mute In 20 Seconds."), psychologist);
+            chatRoom.sendTo(new Chat("SPECIAL", alivePlayersToString()), psychologist);
+            chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), psychologist);
+            chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), psychologist);
 
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
@@ -1034,7 +1063,7 @@ public class God
                 }
             }
 
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), psychologist);
+            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), psychologist);
 
             try 
             {
@@ -1073,13 +1102,14 @@ public class God
             }
         }
 
-        chatRoom.sendToAll(new Chat(new Special(), "Psychologist Sleep."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Psychologist Sleep."));
         return candidate;
     }
 
     private boolean armoredRole() 
     {
-        chatRoom.sendToAll(new Chat(new Special(), "Armored Wake Up."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Armored Wake Up."));
+
         Player armored = null;
         for(Player p : alivePlayers)
         {
@@ -1099,15 +1129,15 @@ public class God
             {
 
             }
-            chatRoom.sendToAll(new Chat(new Special(), "Armored Sleep."));
+            chatRoom.sendToAll(new Chat("SPECIAL", "Armored Sleep."));
             return false;
         }
         else
         {
-            chatRoom.sendTo(new Chat(new Special(), "Armored If Your Want To Have Inquiry Tomorrow Just Send 1\nNote That Your Last Message Will Be Accepted."), armored);
+            chatRoom.sendTo(new Chat("SPECIAL", "Armored If Your Want To Have Inquiry Tomorrow Just Send 1\nNote That Your Last Message Will Be Accepted."), armored);
             
-            chatRoom.sendTo(new Chat(new Special(), "VOTE"), armored);
-            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), armored);
+            chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), armored);
+            chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), armored);
 
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
@@ -1123,7 +1153,7 @@ public class God
                 }
             }
 
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), armored);
+            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), armored);
 
             try 
             {
@@ -1141,7 +1171,7 @@ public class God
 
             if(c == null)
             {
-                chatRoom.sendToAll(new Chat(new Special(), "Armored Sleep."));
+                chatRoom.sendToAll(new Chat("SPECIAL", "Armored Sleep."));
                 return false;
             }
             else
@@ -1149,12 +1179,12 @@ public class God
                 if(Integer.parseInt(c.getText()) == 1)
                 {
                     ((Armored)armored.getRole()).setInquiryCount(((Armored)armored.getRole()).getInquiryCount() + 1);
-                    chatRoom.sendToAll(new Chat(new Special(), "Armored Sleep."));
+                    chatRoom.sendToAll(new Chat("SPECIAL", "Armored Sleep."));
                     return true;
                 }
                 else
                 {
-                    chatRoom.sendToAll(new Chat(new Special(), "Armored Sleep."));
+                    chatRoom.sendToAll(new Chat("SPECIAL", "Armored Sleep."));
                     return false;
                 }
             }
@@ -1187,16 +1217,14 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat(new Special(), "Mayor If Your Want To Cancel This Voting Just Send 1\nNote That Your Last Message Will Be Accepted."), mayor);
+            chatRoom.sendTo(new Chat("SPECIAL", "Mayor If Your Want To Cancel This Voting Just Send 1\nNote That Your Last Message Will Be Accepted."), mayor);
             
-            chatRoom.sendTo(new Chat(new Special(), "VOTE"), mayor);
-            chatRoom.sendTo(new Chat(new Special(), "UNMUTE"), mayor);
+            chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), mayor);
+            chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), mayor);
 
             Boolean isTimed = false;
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
-
-            boolean isCanceled = false;
 
             Chat c = null;
 
@@ -1208,7 +1236,7 @@ public class God
                 }
             }
 
-            chatRoom.sendTo(new Chat(new Special(), "MUTE"), mayor);
+            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), mayor);
 
             try 
             {
@@ -1356,8 +1384,8 @@ public class God
     {
         if(aliveMafiaCount == 0)
         {   
-            chatRoom.sendToAll(new Chat(new Special(), "Congrats To All Citizens \n  Citizen Won The Game."));
-            chatRoom.sendToAll(new Chat(new Special(), "END"));
+            chatRoom.sendToAll(new Chat("SPECIAL", "Congrats To All Citizens \n  Citizen Won The Game."));
+            chatRoom.sendToAll(new Chat("SPECIAL", "END"));
             try 
             {
                 Thread.sleep(1000);
@@ -1368,10 +1396,10 @@ public class God
             }
             System.exit(0);
         }
-        else if(aliveMafiaCount == (alivePlayersCount - aliveMafiaCount))
+        else if(aliveMafiaCount >= (alivePlayersCount - aliveMafiaCount))
         {
-            chatRoom.sendToAll(new Chat(new Special(), "Congrats To All Mafias \n  Mafia Won The Game."));
-            chatRoom.sendToAll(new Chat(new Special(), "END"));
+            chatRoom.sendToAll(new Chat("SPECIAL", "Congrats To All Mafias \n  Mafia Won The Game."));
+            chatRoom.sendToAll(new Chat("SPECIAL", "END"));
             try 
             {
                 Thread.sleep(1000);
@@ -1420,7 +1448,7 @@ public class God
     {
         for(Player player : players)
         {
-            chatRoom.sendTo(new Chat(new Special(), player.getUserName() + " Your Role Is : " + player.getRole().toString()), player);
+            chatRoom.sendTo(new Chat("SPECIAL", player.getUserName() + " Your Role Is : " + player.getRole().toString()), player);
         }
     }
     
@@ -1442,7 +1470,7 @@ public class God
                 text += (mafia.getUserName() + " Is Regular Mafia \n");
             }
         }
-        chatRoom.sendTo(new Chat(new Special(), text), mafias);
+        chatRoom.sendTo(new Chat("SPECIAL", text), mafias);
     }
     
     private void introduceDoctorToMayor()
@@ -1455,7 +1483,7 @@ public class God
                 {
                     if(doctor.getRole() instanceof Doctor)
                     {
-                        chatRoom.sendTo(new Chat(new Special(), doctor.getUserName() + " Is Doctor"), mayor);
+                        chatRoom.sendTo(new Chat("SPECIAL", doctor.getUserName() + " Is Doctor"), mayor);
                     }
                 }
             }
@@ -1478,7 +1506,7 @@ public class God
         }
         Collections.shuffle(candidateMafias);
         headOfMafia = candidateMafias.get(0);
-        chatRoom.sendTo(new Chat(new Special(), headOfMafia.getUserName() + " Is New Head Of Mafia."), mafias);
+        chatRoom.sendTo(new Chat("SPECIAL", headOfMafia.getUserName() + " Is New Head Of Mafia."), mafias);
     }
 
     public ArrayList<Player> getPlayers()

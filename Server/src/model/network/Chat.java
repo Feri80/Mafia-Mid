@@ -6,11 +6,11 @@ import model.logic.*;
 
 public class Chat implements Serializable
 {
-    private Player sender;
+    private String sender;
 
     private String text;
 
-    public Chat(Player sender, String text)
+    public Chat(String sender, String text)
     {
         this.sender = sender;
         this.text = text;
@@ -19,7 +19,7 @@ public class Chat implements Serializable
     @Override
     public String toString() 
     {
-        return God.ANSI_PURPLE + sender.getUserName() + " : " + God.ANSI_BLUE + text + God.ANSI_RESET;   
+        return God.ANSI_PURPLE + sender + " : " + God.ANSI_BLUE + text + God.ANSI_RESET;   
     }
 
     public String getText()
@@ -27,7 +27,7 @@ public class Chat implements Serializable
         return text;
     }
 
-    public Player getSender()
+    public String getSender()
     {
         return sender;
     }

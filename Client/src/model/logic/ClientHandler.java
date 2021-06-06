@@ -39,23 +39,26 @@ public class ClientHandler
     public ClientHandler(int port)
     {
         this.port = port;
+        this.userName = "";
+        this.objectOutputStream = null;
+        this.objectInputStream = null;
         this.isMuted = false;
         this.isVoting = false;
     }
 
     public void startGame()
     {
-        System.out.println(port);
         try
         {
-            channel = new Socket("127.0.0.1", port);
+            this.channel = new Socket("localhost", port);
             System.out.println("Socket Created.");
-            objectOutputStream = new ObjectOutputStream(channel.getOutputStream());
-            objectInputStream = new ObjectInputStream(channel.getInputStream());
+            this.objectOutputStream = new ObjectOutputStream(channel.getOutputStream());
+            this.objectInputStream = new ObjectInputStream(channel.getInputStream());
             System.out.println("Streams Created.");
         } 
         catch (Exception e) 
         {   
+            System.out.println("Error In Making Socket Or Streams.");
             e.printStackTrace();
         }
 
@@ -64,7 +67,6 @@ public class ClientHandler
         Thread thread = new Thread(new ReadingChatHandler(this));
         thread.start();
 
-        
         while(true)
         {
             if(isMuted == false)
@@ -77,7 +79,7 @@ public class ClientHandler
                         int k = input.nextInt();
                         if(isMuted == false && isVoting == true)
                         {
-                            Thread thread2 = new Thread(new SendingChatHandler(this, new Chat(new Player(userName, channel, objectOutputStream, objectInputStream), String.valueOf(k))));
+                            Thread thread2 = new Thread(new SendingChatHandler(this, new Chat(userName, String.valueOf(k))));
                             thread2.start();
                         }
                     } 
@@ -92,7 +94,7 @@ public class ClientHandler
                     String s = input.nextLine();
                     if(isMuted == false && isVoting == false)
                     {
-                        Thread thread3 = new Thread(new SendingChatHandler(this, new Chat(new Player(userName, channel, objectOutputStream, objectInputStream), s)));
+                        Thread thread3 = new Thread(new SendingChatHandler(this, new Chat(userName, s)));
                         thread3.start();
                     }
                 }
@@ -113,6 +115,11 @@ public class ClientHandler
     public String getUserName()
     {
         return userName;
+    }
+
+    public void setUserName(String userName)
+    {
+        this.userName = userName;
     }
 
     public boolean getIsMuted()
