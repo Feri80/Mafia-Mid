@@ -19,7 +19,7 @@ public class Chat implements Serializable
     @Override
     public String toString() 
     {
-        return God.ANSI_PURPLE + sender + " : " + God.ANSI_BLUE + text + God.ANSI_RESET;   
+        return "\u001B[35m" + sender + " : " + "\u001B[34m" + text + "\u001B[0m";   
     }
 
     public String getText()

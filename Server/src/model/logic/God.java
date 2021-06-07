@@ -248,19 +248,21 @@ public class God
             forceMute = null;
         }
 
-        Boolean isTimed = false;
-        Thread timer = new Thread(new Timer(isTimed, 300000));
+        ArrayList<Integer> isTimed = new ArrayList<>();
+        Thread timer = new Thread(new Timer(isTimed, 120000));
         timer.start();
 
         System.out.println("chat started.");
 
-        while(isTimed == false)
+        while(isTimed.size() == 0)
         {
             if(!chatQueue.isEmpty())
             {
                 chatRoom.sendToAll(chatQueue.popFrontChat());
             }
         }
+
+        System.out.println("time out.");
 
         chatRoom.sendToAllAlive(new Chat("SPECIAL", "MUTE"));
 
@@ -302,11 +304,11 @@ public class God
         chatRoom.sendToAllAlive(new Chat("SPECIAL", "VOTE"));
         chatRoom.sendToAllAlive(new Chat("SPECIAL", "UNMUTE"));
 
-        Boolean isTimed = false;
+        ArrayList<Integer> isTimed = new ArrayList<>();
         Thread timer = new Thread(new Timer(isTimed, 30000));
         timer.start();
 
-        while(isTimed == false)
+        while(isTimed.size() == 0)
         {
             if(!chatQueue.isEmpty())
             {
@@ -535,11 +537,11 @@ public class God
             }
         }
 
-        Boolean isTimed = false;
+        ArrayList<Integer> isTimed = new ArrayList<>();
         Thread timer = new Thread(new Timer(isTimed, 20000));
         timer.start();
         
-        while(isTimed == false)
+        while(isTimed.size() == 0)
         {
             if(!chatQueue.isEmpty())
             {
@@ -632,11 +634,11 @@ public class God
 
         if(doctorLecter == null)
         {
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
 
             }
@@ -648,13 +650,13 @@ public class God
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), doctorLecter);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), doctorLecter);
 
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             Chat c = null;
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
                 if(!chatQueue.isEmpty())
                 {
@@ -734,11 +736,11 @@ public class God
 
         if(doctor == null)
         {
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
 
             }
@@ -750,13 +752,13 @@ public class God
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), doctor);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), doctor);
 
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             Chat c = null;
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
                 if(!chatQueue.isEmpty())
                 {
@@ -833,11 +835,11 @@ public class God
 
         if(detective== null)
         {
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
 
             }
@@ -849,13 +851,13 @@ public class God
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), detective);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), detective);
 
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             Chat c = null;
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
                 if(!chatQueue.isEmpty())
                 {
@@ -938,11 +940,11 @@ public class God
 
         if(sniper == null || ((Sniper)sniper.getRole()).getSnipeCount() == (mafias.size() - 2))
         {
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
 
             }
@@ -954,13 +956,13 @@ public class God
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), sniper);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), sniper);
 
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             Chat c = null;
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
                 if(!chatQueue.isEmpty())
                 {
@@ -1033,11 +1035,11 @@ public class God
 
         if(psychologist == null)
         {
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
 
             }
@@ -1049,13 +1051,13 @@ public class God
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), psychologist);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), psychologist);
 
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             Chat c = null;
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
                 if(!chatQueue.isEmpty())
                 {
@@ -1121,11 +1123,11 @@ public class God
 
         if(armored == null || ((Armored)armored.getRole()).getInquiryCount() == 2)
         {
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
 
             }
@@ -1139,13 +1141,13 @@ public class God
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), armored);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), armored);
 
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             Chat c = null;
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
                 if(!chatQueue.isEmpty())
                 {
@@ -1204,11 +1206,11 @@ public class God
 
         if(mayor == null)
         {
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
 
             }
@@ -1222,13 +1224,13 @@ public class God
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), mayor);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), mayor);
 
-            Boolean isTimed = false;
+            ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
             timer.start();
 
             Chat c = null;
 
-            while(isTimed == false)
+            while(isTimed.size() == 0)
             {
                 if(!chatQueue.isEmpty())
                 {

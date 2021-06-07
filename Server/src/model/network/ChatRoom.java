@@ -38,8 +38,15 @@ public class ChatRoom
 
     public void sendTo(Chat chat, Player dest) 
     {
-        Thread thread = new Thread(new SendingChatHandler(dest, chat));
-        thread.start();
+        try 
+        {
+            dest.getObjectOutputStream().writeObject(chat);
+        } 
+        catch (Exception e) 
+        {
+            System.out.println("sending chat error.");
+            e.printStackTrace();
+        }
     }
 
     public void sendTo(Chat chat, ArrayList<Player> dest)

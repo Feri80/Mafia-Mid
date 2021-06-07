@@ -34,6 +34,7 @@ public class ConnectionHandler implements Runnable
                 out.writeObject(new Chat("SPECIAL", "This Username Is Already Taken Please Enter Another One."));
             }
 			System.out.println(chatRoom.getPlayers().get(chatRoom.getPlayers().size() - 1).getUserName());
+            out.writeObject(new Chat("SPECIAL", "#" + chatRoom.getPlayers().get(chatRoom.getPlayers().size() - 1).getUserName()));
             out.writeObject(new Chat("SPECIAL", "OK your username accepted."));
             out.writeObject(new Chat("SPECIAL", "MUTE"));
         } 

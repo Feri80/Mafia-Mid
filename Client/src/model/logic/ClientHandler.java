@@ -79,8 +79,15 @@ public class ClientHandler
                         int k = input.nextInt();
                         if(isMuted == false && isVoting == true)
                         {
-                            Thread thread2 = new Thread(new SendingChatHandler(this, new Chat(userName, String.valueOf(k))));
-                            thread2.start();
+                            try 
+                            {
+                                objectOutputStream.writeObject(new Chat(userName, String.valueOf(k)));
+                            } 
+                            catch (Exception e) 
+                            {
+                                System.out.println("Sending Chat Error.");
+                                e.printStackTrace();
+                            }
                         }
                     } 
                     catch (InputMismatchException e) 
@@ -94,8 +101,15 @@ public class ClientHandler
                     String s = input.nextLine();
                     if(isMuted == false && isVoting == false)
                     {
-                        Thread thread3 = new Thread(new SendingChatHandler(this, new Chat(userName, s)));
-                        thread3.start();
+                        try 
+                        {
+                            objectOutputStream.writeObject(new Chat(userName, s));
+                        } 
+                        catch (Exception e) 
+                        {
+                            System.out.println("Sending Chat Error.");
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
