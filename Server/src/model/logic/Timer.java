@@ -16,17 +16,14 @@ public class Timer implements Runnable
 
     @Override
     public void run()
-    {
-        while(time > 0)
+    {    
+        try 
         {
-            try 
-            {
-                Thread.sleep(time);
-            } 
-            catch (InterruptedException e) 
-            {
-                e.printStackTrace();
-            }
+            Thread.sleep(time);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
         }
         isTimed.add(1);
         System.out.println("timer closed");

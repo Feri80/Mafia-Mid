@@ -305,21 +305,23 @@ public class God
         chatRoom.sendToAllAlive(new Chat("SPECIAL", "UNMUTE"));
 
         ArrayList<Integer> isTimed = new ArrayList<>();
-        Thread timer = new Thread(new Timer(isTimed, 30000));
+        Thread timer = new Thread(new Timer(isTimed, 40000));
         timer.start();
+
+        votes.clear();
 
         while(isTimed.size() == 0)
         {
             if(!chatQueue.isEmpty())
             {
                 Chat c = chatQueue.popFrontChat();
-                if(!( (Integer.parseInt(c.getText()) < 1) || (Integer.parseInt(c.getText()) > alivePlayersCount) ))
+                if((Integer.parseInt(c.getText()) >= 1) && (Integer.parseInt(c.getText()) <= alivePlayersCount))
                 {
                     for(Player p : alivePlayers)
                     {
                         if(p.getUserName().equals(c.getSender()))
                         {
-                            votes.put(p, alivePlayers.get( ( Integer.parseInt(c.getText()) - 1) ));
+                            votes.put(p, alivePlayers.get(Integer.parseInt(c.getText()) - 1));
                         }
                     }
                 }
@@ -340,13 +342,13 @@ public class God
         while(!chatQueue.isEmpty())
         {
             Chat c = chatQueue.popFrontChat();
-            if(!( (Integer.parseInt(c.getText()) < 1) || (Integer.parseInt(c.getText()) > alivePlayersCount) ))
+            if((Integer.parseInt(c.getText()) >= 1) && (Integer.parseInt(c.getText()) <= alivePlayersCount))
             {
                 for(Player p : alivePlayers)
                 {
                     if(p.getUserName().equals(c.getSender()))
                     {
-                        votes.put(p, alivePlayers.get( ( Integer.parseInt(c.getText()) - 1) ));
+                        votes.put(p, alivePlayers.get(Integer.parseInt(c.getText()) - 1));
                     }
                 }
             }
@@ -363,6 +365,8 @@ public class God
 
         chatRoom.sendToAll(new Chat("SPECIAL", votersToString()));
 
+        System.out.println("voters to string completed.");
+
         try 
         {
             Thread.sleep(3000);
@@ -374,6 +378,8 @@ public class God
 
         chatRoom.sendToAll(new Chat("SPECIAL", votesToString()));
         
+        System.out.println("votes to string completed.");
+
         try 
         {
             Thread.sleep(3000);
@@ -946,7 +952,14 @@ public class God
 
             while(isTimed.size() == 0)
             {
-
+                try 
+                {
+                    Thread.sleep(1000);
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
             }
         }
         else
@@ -1322,7 +1335,6 @@ public class God
             s += ANSI_YELLOW + voter.getUserName() + ANSI_GREEN + " -> " + ANSI_PURPLE + votes.get(voter) + ANSI_RESET + "\n";
         }
         return s;
-
     }
 
     private String votesToString()
@@ -1330,7 +1342,7 @@ public class God
         String s = "";
         int[] a = new int[alivePlayersCount];
 
-        for(int i = 0; i < aliveMafiaCount; i++)
+        for(int i = 0; i < alivePlayersCount; i++)
         {
             a[i] = 0;
         }
@@ -1340,7 +1352,7 @@ public class God
             a[alivePlayers.indexOf(votes.get(voter))]++;
         }
 
-        for(int i = 0; i < aliveMafiaCount; i++)
+        for(int i = 0; i < alivePlayersCount; i++)
         {
             s += ANSI_RED + alivePlayers.get(i).getUserName() + ANSI_GREEN + " : " + ANSI_PURPLE + a[i] + ANSI_RESET + "\n";
         }
