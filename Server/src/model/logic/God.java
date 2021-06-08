@@ -1009,7 +1009,9 @@ public class God
             }
         }
 
-        if(sniper == null || ((Sniper)sniper.getRole()).getSnipeCount() == (mafias.size() - 2))
+        int sniperShots = Math.max(mafias.size() - 2, 1);
+
+        if(sniper == null || ((Sniper)sniper.getRole()).getSnipeCount() == sniperShots)
         {
             ArrayList<Integer> isTimed = new ArrayList<>();
             Thread timer = new Thread(new Timer(isTimed, 20000));
