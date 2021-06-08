@@ -179,11 +179,14 @@ public class God
 
     private void loop()
     {
-        checkFinishConditions();
-        startDay();
-        startVoting();
-        checkFinishConditions();
-        startNight();
+        while(true)
+        {
+            checkFinishConditions();
+            startDay();
+            startVoting();
+            checkFinishConditions();
+            startNight();
+        }
     }
 
     private void startDay()
@@ -483,39 +486,46 @@ public class God
 
         nightKills.clear();
 
-        if(sniperCandidate.getRole() instanceof Sniper)
+        try 
         {
-            nightKills.add(sniperCandidate);
-            sniperCandidate.setIsAlive(false);
-            alivePlayersCount--;
-            alivePlayers.remove(sniperCandidate);
-        }
-        else if(!(sniperCandidate.getUserName().equals(doctorLecterCandidate.getUserName())))
-        {
-            if(sniperCandidate.getUserName().equals(headOfMafia.getUserName()))
+            if(sniperCandidate.getRole() instanceof Sniper)
             {
-                changeHeadOfMafia();
+                nightKills.add(sniperCandidate);
+                sniperCandidate.setIsAlive(false);
+                alivePlayersCount--;
+                alivePlayers.remove(sniperCandidate);
             }
-            nightKills.add(sniperCandidate);
-            sniperCandidate.setIsAlive(false);
-            alivePlayersCount--;
-            alivePlayers.remove(sniperCandidate);
-            if(sniperCandidate.getRole() instanceof Mafia)
+            else if(!(sniperCandidate.getUserName().equals(doctorLecterCandidate.getUserName())))
             {
-                aliveMafiaCount--;
+                if(sniperCandidate.getUserName().equals(headOfMafia.getUserName()))
+                {
+                    changeHeadOfMafia();
+                }
+                nightKills.add(sniperCandidate);
+                sniperCandidate.setIsAlive(false);
+                alivePlayersCount--;
+                alivePlayers.remove(sniperCandidate);
+                if(sniperCandidate.getRole() instanceof Mafia)
+                {
+                    aliveMafiaCount--;
+                }
             }
-        }
-
-        if((mafiasCandidate.getRole() instanceof Armored) && ((Armored)mafiasCandidate.getRole()).getIsArmored() == true)
+    
+            if((mafiasCandidate.getRole() instanceof Armored) && ((Armored)mafiasCandidate.getRole()).getIsArmored() == true)
+            {
+                ((Armored)mafiasCandidate.getRole()).brokeArmor();
+            }
+            else if(!(mafiasCandidate.getUserName().equals(doctorCandidate.getUserName())))
+            {
+                nightKills.add(mafiasCandidate);
+                mafiasCandidate.setIsAlive(false);
+                alivePlayersCount--;
+                alivePlayers.remove(mafiasCandidate);
+            }
+        } 
+        catch (Exception e) 
         {
-            ((Armored)mafiasCandidate.getRole()).brokeArmor();
-        }
-        else if(!(mafiasCandidate.getUserName().equals(doctorCandidate.getUserName())))
-        {
-            nightKills.add(mafiasCandidate);
-            mafiasCandidate.setIsAlive(false);
-            alivePlayersCount--;
-            alivePlayers.remove(mafiasCandidate);
+            //TODO: handle exception
         }
 
         chatRoom.sendToAll(new Chat("SPECIAL", "Day Starts In 10 Seconds."));
