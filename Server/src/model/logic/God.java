@@ -241,6 +241,17 @@ public class God
             e.printStackTrace();
         }
 
+        chatRoom.sendToAll(new Chat("SPECIAL", alivePlayersToString()));
+
+        try 
+        {
+            Thread.sleep(5000);
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
+
         chatRoom.sendToAllAlive(new Chat("SPECIAL", "FREE"));
         chatRoom.sendToAllAlive(new Chat("SPECIAL", "UNMUTE"));
 
