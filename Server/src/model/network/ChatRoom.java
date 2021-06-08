@@ -44,8 +44,7 @@ public class ChatRoom
         } 
         catch (Exception e) 
         {
-            System.out.println("sending chat error.");
-            e.printStackTrace();
+            System.out.println("sending chat to " + dest + " error.");
         }
     }
 
