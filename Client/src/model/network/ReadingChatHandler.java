@@ -45,12 +45,9 @@ public class ReadingChatHandler implements Runnable
                     {
                         System.exit(0);
                     }
-                    else if(chat.getText().length() > 0)
+                    else if(chat.getText().length() > 0 && chat.getText().toCharArray()[0] == '#')
                     {
-                        if( chat.getText().toCharArray()[0] == '#')
-                        {
-                            clientHandler.setUserName(chat.getText().substring(1));
-                        }
+                        clientHandler.setUserName(chat.getText().substring(1));
                     }
                     else
                     {
