@@ -95,7 +95,7 @@ public class God
 
         System.out.println("first night completed.");
 
-        chatRoom.readFromAll(chatQueue);
+        chatRoom.readFromAll(this);
 
         loop();
     }
@@ -416,6 +416,7 @@ public class God
                 {
                     changeHeadOfMafia();
                 }
+                chatRoom.sendTo(new Chat("SPECIAL", "KILL"), candidate);
                 candidate.setIsAlive(false);
                 alivePlayersCount--;
                 alivePlayers.remove(candidate);
@@ -490,6 +491,7 @@ public class God
         {
             if(sniperCandidate.getRole() instanceof Sniper)
             {
+                chatRoom.sendTo(new Chat("SPECIAL", "KILL"), sniperCandidate);
                 nightKills.add(sniperCandidate);
                 sniperCandidate.setIsAlive(false);
                 alivePlayersCount--;
@@ -501,6 +503,7 @@ public class God
                 {
                     changeHeadOfMafia();
                 }
+                chatRoom.sendTo(new Chat("SPECIAL", "KILL"), sniperCandidate);
                 nightKills.add(sniperCandidate);
                 sniperCandidate.setIsAlive(false);
                 alivePlayersCount--;
@@ -517,6 +520,7 @@ public class God
             }
             else if(!(mafiasCandidate.getUserName().equals(doctorCandidate.getUserName())))
             {
+                chatRoom.sendTo(new Chat("SPECIAL", "KILL"), mafiasCandidate);
                 nightKills.add(mafiasCandidate);
                 mafiasCandidate.setIsAlive(false);
                 alivePlayersCount--;
@@ -525,7 +529,7 @@ public class God
         } 
         catch (Exception e) 
         {
-            //TODO: handle exception
+
         }
 
         chatRoom.sendToAll(new Chat("SPECIAL", "Day Starts In 10 Seconds."));
@@ -1575,7 +1579,7 @@ public class God
         }
     }
 
-    private void changeHeadOfMafia()
+    public void changeHeadOfMafia()
     {
         ArrayList<Player> candidateMafias = new ArrayList<>();
         for(Player p : mafias)
@@ -1599,4 +1603,43 @@ public class God
         return players;
     }
 
+    public ChatQueue getChatQueue()
+    {
+        return chatQueue;
+    }
+
+    public ArrayList<Player> getAlivePlayers()
+    {
+        return alivePlayers;
+    }
+
+    public void setAlivePlayersCount(int k)
+    {
+        alivePlayersCount = k;
+    }
+
+    public int getAlivePlayersCount()
+    {
+        return alivePlayersCount;
+    }
+
+    public void setAliveMafiaCount(int k)
+    {
+        aliveMafiaCount = k;
+    }
+
+    public int getAliveMafiaCount()
+    {
+        return aliveMafiaCount;
+    } 
+
+    public Player getHeadOfMafia()
+    {
+        return headOfMafia;
+    }
+
+	public ChatRoom getChatRoom() 
+    {
+		return chatRoom;
+	}
 }

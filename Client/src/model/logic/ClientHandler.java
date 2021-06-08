@@ -36,6 +36,8 @@ public class ClientHandler
 
     private boolean isVoting;
 
+    private boolean isKilled;
+
     public ClientHandler(int port)
     {
         this.port = port;
@@ -44,6 +46,7 @@ public class ClientHandler
         this.objectInputStream = null;
         this.isMuted = false;
         this.isVoting = false;
+        this.isKilled = false;
     }
 
     public void startGame()
@@ -69,6 +72,17 @@ public class ClientHandler
 
         while(true)
         {
+            while(isKilled == true)
+            {
+                try 
+                {
+                    Thread.sleep(1000);    
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
+            }
             if(isMuted == false)
             {
                 if(isVoting == true)
@@ -99,6 +113,10 @@ public class ClientHandler
                 {
                     Scanner input = new Scanner(System.in);
                     String s = input.nextLine();
+                    if(s.equals("EXIT"))
+                    {
+                        System.exit(0);
+                    }
                     if(isMuted == false && isVoting == false)
                     {
                         try 
@@ -146,6 +164,11 @@ public class ClientHandler
         return isVoting;
     }
 
+    public boolean getIsKilled()
+    {
+        return isKilled;
+    }
+
     public void setIsMuted(boolean isMuted)
     {
         this.isMuted = isMuted;
@@ -154,5 +177,10 @@ public class ClientHandler
     public void setIsVoting(boolean isVoting)
     {
         this.isVoting = isVoting;
+    }
+
+    public void setIsKilled(boolean isKilled)
+    {
+        this.isKilled = isKilled;
     }
 }

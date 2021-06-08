@@ -1,7 +1,6 @@
 package model.network;
 
 
-import model.network.*;
 import model.logic.*;
 
 
@@ -45,6 +44,10 @@ public class ReadingChatHandler implements Runnable
                     {
                         System.exit(0);
                     }
+                    else if(chat.getText().equals("KILL"))
+                    {
+                        clientHandler.setIsKilled(true);
+                    }
                     else if(chat.getText().length() > 0 && chat.getText().toCharArray()[0] == '#')
                     {
                         clientHandler.setUserName(chat.getText().substring(1));
@@ -66,8 +69,7 @@ public class ReadingChatHandler implements Runnable
             catch(Exception e)
             {
                 System.out.println("Reading Error.");
-                e.printStackTrace();
-                
+                break;
             }
             
         }

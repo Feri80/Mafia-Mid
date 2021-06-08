@@ -3,18 +3,22 @@ package model.network;
 import java.io.IOException;
 
 import model.logic.ChatQueue;
+import model.logic.God;
 import model.logic.Player;
+import model.roles.Mafia;
 
 public class ReadingChatHandler implements Runnable
 {
+    private God god;
+
     private Player player;
 
     private ChatQueue chatQueue;
 
-    public ReadingChatHandler(Player player, ChatQueue chatQueue)
+    public ReadingChatHandler(God god, Player player)
     {
+        this.god = god;
         this.player = player;
-        this.chatQueue = chatQueue;
     }
 
     @Override
@@ -26,12 +30,24 @@ public class ReadingChatHandler implements Runnable
             {
                 Chat chat = (Chat)player.getObjectInputStream().readObject();
                 System.out.println(chat);
-                chatQueue.pushBackChat(chat);
+                god.getChatQueue().pushBackChat(chat);
             } 
             catch(ClassNotFoundException | IOException e) 
             {
                 System.out.println("reading chat error.");
-                e.printStackTrace();
+                if(player.getUserName().equals(god.getHeadOfMafia().getUserName()))
+                {
+                    god.changeHeadOfMafia();
+                }
+                god.getChatRoom().sendTo(new Chat("SPECIAL", "KILL"), player);
+                player.setIsAlive(false);
+                god.setAlivePlayersCount(god.getAlivePlayersCount() - 1);
+                god.getAlivePlayers().remove(player);
+                if(player.getRole() instanceof Mafia)
+                {
+                    god.setAliveMafiaCount(god.getAliveMafiaCount() - 1);
+                }
+                break;
             }
         }
     }

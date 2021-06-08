@@ -23,8 +23,7 @@ public class SendingChatHandler implements Runnable
         } 
         catch (Exception e) 
         {
-            System.out.println("sending chat error.");
-            e.printStackTrace();
+            System.out.println("sending chat to " + player + " problem");
         }
     }
     
