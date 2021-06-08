@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 import model.network.Chat;
 import model.network.ReadingChatHandler;
-import model.network.SendingChatHandler;
 
 public class ClientHandler 
 {
@@ -100,7 +99,6 @@ public class ClientHandler
                             catch (Exception e) 
                             {
                                 System.out.println("Sending Chat Error.");
-                                e.printStackTrace();
                             }
                         }
                     } 
@@ -126,7 +124,6 @@ public class ClientHandler
                         catch (Exception e) 
                         {
                             System.out.println("Sending Chat Error.");
-                            e.printStackTrace();
                         }
                     }
                 }

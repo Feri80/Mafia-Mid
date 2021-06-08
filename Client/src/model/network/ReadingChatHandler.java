@@ -47,6 +47,7 @@ public class ReadingChatHandler implements Runnable
                     else if(chat.getText().equals("KILL"))
                     {
                         clientHandler.setIsKilled(true);
+                        System.out.println(ClientHandler.ANSI_RED + "YOU ARE DEAD !!!\n" + ClientHandler.ANSI_YELLOW + "You Can Still Watch Game." + ClientHandler.ANSI_RESET);
                     }
                     else if(chat.getText().length() > 0 && chat.getText().toCharArray()[0] == '#')
                     {
