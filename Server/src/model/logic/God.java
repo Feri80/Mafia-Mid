@@ -744,7 +744,10 @@ public class God
         }
 
         chatRoom.sendToAll(new Chat("SPECIAL", "DoctorLecter Sleep."));
-        chatRoom.sendTo(new Chat("SPECIAL", candidate.toString()), mafias);
+        if(candidate != null)
+        {
+            chatRoom.sendTo(new Chat("SPECIAL", candidate.toString()), mafias);
+        }
         return candidate;
     }
 
