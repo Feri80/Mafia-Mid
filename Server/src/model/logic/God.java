@@ -447,17 +447,31 @@ public class God
 
         Player mafiasCandidate = mafiaRole();
 
+        System.out.println("mafias role completed.");
+
         Player doctorLecterCandidate = doctorLecterRole();
+
+        System.out.println("doctor lecter role completed.");
 
         Player doctorCandidate = doctorRole();
 
+        System.out.println("doctor role completed.");
+
         detectiveRole();
+
+        System.out.println("detective role completed.");
 
         Player sniperCandidate = sniperRole();
 
+        System.out.println("sniper role completed.");
+
         Player psychologistCandidate = psychologistRole();
 
+        System.out.println("psychologist role completed.");
+
         boolean armoredChoice = armoredRole();
+
+        System.out.println("armored role completed.");
 
         inquiryCheck = false;
 
@@ -516,6 +530,8 @@ public class God
         }
 
         state = "trash";
+
+        System.out.println("night completed.");
     }
 
     private Player mafiaRole()
@@ -646,7 +662,14 @@ public class God
 
             while(isTimed.size() == 0)
             {
-
+                try 
+                {
+                    Thread.sleep(1000);
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
             }
         }
         else
@@ -748,7 +771,14 @@ public class God
 
             while(isTimed.size() == 0)
             {
-
+                try 
+                {
+                    Thread.sleep(1000);
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
             }
         }
         else
@@ -847,7 +877,14 @@ public class God
 
             while(isTimed.size() == 0)
             {
-
+                try 
+                {
+                    Thread.sleep(1000);
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
             }
         }
         else
@@ -1054,7 +1091,14 @@ public class God
 
             while(isTimed.size() == 0)
             {
-
+                try 
+                {
+                    Thread.sleep(1000);
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
             }
         }
         else
@@ -1142,7 +1186,14 @@ public class God
 
             while(isTimed.size() == 0)
             {
-
+                try 
+                {
+                    Thread.sleep(1000);
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
             }
             chatRoom.sendToAll(new Chat("SPECIAL", "Armored Sleep."));
             return false;
@@ -1225,8 +1276,15 @@ public class God
 
             while(isTimed.size() == 0)
             {
-
-            }
+                try 
+                {
+                    Thread.sleep(1000);
+                } 
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
+            }   
 
             return false;
         }
