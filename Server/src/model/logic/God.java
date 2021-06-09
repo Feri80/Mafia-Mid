@@ -241,7 +241,7 @@ public class God
             e.printStackTrace();
         }
 
-        chatRoom.sendToAll(new Chat("SPECIAL", alivePlayersToString()));
+        chatRoom.sendToAll(new Chat("SPECIAL", deadOrAliveToString()));
 
         try 
         {
@@ -1655,4 +1655,21 @@ public class God
     {
 		return chatRoom;
 	}
+
+    public String deadOrAliveToString()
+    {
+        String s = "";
+        for(Player p : players)
+        {
+            if(p.getIsAlive() == true)
+            {
+                s += ANSI_YELLOW + p.getUserName() + ANSI_PURPLE + " Is " + ANSI_GREEN + "Alive\n" + ANSI_RESET;
+            }
+            else
+            {
+                s += ANSI_YELLOW + p.getUserName() + ANSI_PURPLE + " Is " + ANSI_RED + "Dead\n" + ANSI_RESET;
+            }
+        }
+        return s;
+    }
 }
