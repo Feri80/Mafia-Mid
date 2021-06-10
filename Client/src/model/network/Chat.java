@@ -22,6 +22,11 @@ public class Chat implements Serializable
         return "\u001B[35m" + sender + " : " + "\u001B[34m" + text + "\u001B[0m";   
     }
 
+    public String fileToString()
+    {
+        return sender + " : " + text;
+    }
+
     public String getText()
     {
         return text;

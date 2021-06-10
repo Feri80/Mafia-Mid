@@ -40,7 +40,7 @@ public class ReadingChatHandler implements Runnable
                     god.changeHeadOfMafia();
                 }
                 god.getChatRoom().sendTo(new Chat("SPECIAL", "KILL"), player);
-                god.getChatRoom().sendToAll(new Chat("SPECIAL", player + " KILLED."));
+                god.getChatRoom().sendToAll(new Chat("SPECIAL", player + " Connection Lost."));
                 player.setIsAlive(false);
                 god.setAlivePlayersCount(god.getAlivePlayersCount() - 1);
                 god.getAlivePlayers().remove(player);

@@ -26,19 +26,53 @@ public class ReadingChatHandler implements Runnable
                     System.out.println("Special Chat Got.");
                     if(chat.getText().equals("MUTE"))
                     {
+                        System.out.println("Your Muted.");
                         clientHandler.setIsMuted(true);
+                        try 
+                        {
+                            Thread.sleep(200);    
+                        } 
+                        catch (Exception e) 
+                        {
+                            e.printStackTrace();
+                        }
                     }
                     else if(chat.getText().equals("UNMUTE"))
                     {
+                        System.out.println("Your Unmuted.");
                         clientHandler.setIsMuted(false);
+                        try 
+                        {
+                            Thread.sleep(200);    
+                        } 
+                        catch (Exception e) 
+                        {
+                            e.printStackTrace();
+                        }
                     }
                     else if(chat.getText().equals("VOTE"))
                     {
                         clientHandler.setIsVoting(true);
+                        try 
+                        {
+                            Thread.sleep(200);    
+                        } 
+                        catch (Exception e) 
+                        {
+                            e.printStackTrace();
+                        }
                     }
                     else if(chat.getText().equals("FREE"))
                     {
                         clientHandler.setIsVoting(false);
+                        try 
+                        {
+                            Thread.sleep(200);    
+                        } 
+                        catch (Exception e) 
+                        {
+                            e.printStackTrace();
+                        }
                     }
                     else if(chat.getText().equals("END"))
                     {
@@ -70,6 +104,7 @@ public class ReadingChatHandler implements Runnable
             catch(Exception e)
             {
                 System.out.println("Reading Error.");
+                e.printStackTrace();
                 break;
             }
             

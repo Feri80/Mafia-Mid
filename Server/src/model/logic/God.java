@@ -469,29 +469,43 @@ public class God
 
         chatRoom.sendToAll(new Chat("SPECIAL", "Night Starts."));
 
+        System.out.println("mafias role started.");
+
         Player mafiasCandidate = mafiaRole();
 
         System.out.println("mafias role completed.");
+
+        System.out.println("doctor lecter role started.");
 
         Player doctorLecterCandidate = doctorLecterRole();
 
         System.out.println("doctor lecter role completed.");
 
+        System.out.println("doctor role started.");
+
         Player doctorCandidate = doctorRole();
 
         System.out.println("doctor role completed.");
+
+        System.out.println("detective role started.");
 
         detectiveRole();
 
         System.out.println("detective role completed.");
 
+        System.out.println("sniper role started.");
+
         Player sniperCandidate = sniperRole();
 
         System.out.println("sniper role completed.");
 
+        System.out.println("psychologist role started.");
+
         Player psychologistCandidate = psychologistRole();
 
         System.out.println("psychologist role completed.");
+
+        System.out.println("armored role started.");
 
         boolean armoredChoice = armoredRole();
 
@@ -501,9 +515,13 @@ public class God
 
         inquiryCheck = armoredChoice;
 
+        System.out.println("armoredChoice is " + inquiryCheck);
+
         forceMute = null;
         
         forceMute = psychologistCandidate;
+
+        System.out.println("force mute is " + forceMute);
 
         nightKills.clear();
 

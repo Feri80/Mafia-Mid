@@ -62,6 +62,7 @@ public class ClientHandler
         {   
             System.out.println("Error In Making Socket Or Streams.");
             e.printStackTrace();
+            return;
         }
 
         System.out.println("Successfully Connected To The Server.");
