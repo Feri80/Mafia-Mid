@@ -111,23 +111,38 @@ public class ClientHandler
                 else
                 {
                     Scanner input = new Scanner(System.in);
-                    String s = input.nextLine();
-                    if(s.equals("EXIT"))
+                    try 
                     {
-                        System.exit(0);
-                    }
-                    if(isMuted == false && isVoting == false)
-                    {
-                        try 
+                        String s = input.nextLine();
+                        if(s.equals("EXIT"))
                         {
-                            objectOutputStream.writeObject(new Chat(userName, s));
-                        } 
-                        catch (Exception e) 
-                        {
-                            System.out.println("Sending Chat Error.");
+                            System.exit(0);
                         }
+                        if(isMuted == false && isVoting == false)
+                        {
+                            try 
+                            {
+                                objectOutputStream.writeObject(new Chat(userName, s));
+                            } 
+                            catch (Exception e) 
+                            {
+                                System.out.println("Sending Chat Error.");
+                            }
+                        }    
+                    } 
+                    catch (Exception e) 
+                    {
+                        e.printStackTrace();    
                     }
                 }
+            }
+            try 
+            {
+                Thread.sleep(500);   
+            } 
+            catch (Exception e) 
+            {
+                e.printStackTrace();    
             }
         }
     }
