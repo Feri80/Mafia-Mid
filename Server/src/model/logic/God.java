@@ -109,8 +109,6 @@ public class God
     {
         System.out.println("first night started.");
 
-        state = "firstNight";
-
         setRoles();
 
         for(Player player : players)
@@ -262,9 +260,7 @@ public class God
 
         if(forceMute != null)
         {
-            chatRoom.sendTo(new Chat("SPECIAL", "MUTE"), forceMute);
             chatRoom.sendToAll(new Chat("SPECIAL", forceMute.toString() + " Is Muted In This Day."));
-            forceMute = null;
         }
 
         ArrayList<Integer> isTimed = new ArrayList<>();
@@ -314,13 +310,11 @@ public class God
             e.printStackTrace();
         }
 
-        state = "trash";
+        forceMute = null;
     }
 
     private void startVoting()
     {
-        state = "vote";
-
         chatRoom.sendToAll(new Chat("SPECIAL", "Voting Please Choose One Of The Valid Choices In 30 Seconds."));
         chatRoom.sendToAll(new Chat("SPECIAL", alivePlayersToString()));
 
@@ -459,14 +453,10 @@ public class God
         {
             e.printStackTrace();
         }
-
-        state = "trash";
     }
 
     private void startNight()
     {
-        state = "night";
-
         chatRoom.sendToAll(new Chat("SPECIAL", "Night Starts."));
 
         System.out.println("mafias role started.");
@@ -580,8 +570,6 @@ public class God
         {
             e.printStackTrace();
         }
-
-        state = "trash";
 
         System.out.println("night completed.");
     }
@@ -1715,5 +1703,10 @@ public class God
         {
             System.out.println("error in writing chats.");
         }
+    }
+
+    public Player getForceMute()
+    {
+        return forceMute;
     }
 }

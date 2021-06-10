@@ -30,7 +30,10 @@ public class ReadingChatHandler implements Runnable
             {
                 Chat chat = (Chat)player.getObjectInputStream().readObject();
                 System.out.println(chat);
-                god.getChatQueue().pushBackChat(chat);
+                if(god.getForceMute() != null && god.getForceMute().getUserName().equals(player.getUserName()))
+                {
+                    god.getChatQueue().pushBackChat(chat);
+                }
             } 
             catch(ClassNotFoundException | IOException e) 
             {
