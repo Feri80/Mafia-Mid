@@ -277,7 +277,9 @@ public class God
         {
             if(!chatQueue.isEmpty())
             {
-                chatRoom.sendToAll(chatQueue.popFrontChat());
+                Chat c = chatQueue.popFrontChat();
+                saveChat(c);
+                chatRoom.sendToAll(c);
             }
         }
 
@@ -296,7 +298,9 @@ public class God
 
         while(!chatQueue.isEmpty())
         {
-            chatRoom.sendToAll(chatQueue.popFrontChat());
+            Chat c = chatQueue.popFrontChat();
+            saveChat(c);
+            chatRoom.sendToAll(c);
         }
 
         chatRoom.sendToAll(new Chat("SPECIAL", "Voting Starts In 10 Seconds."));
