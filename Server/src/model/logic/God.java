@@ -1,5 +1,7 @@
 package model.logic;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +33,8 @@ public class God
 
     private ArrayList<Player> nightKills;
 
+    private ArrayList<Chat> chats;
+
     private Player forceMute;
 
     private Player headOfMafia;
@@ -59,6 +63,7 @@ public class God
         this.mafias = new ArrayList<>();
         this.votes = new HashMap<>();
         this.nightKills = new ArrayList<>();
+        this.chats = new ArrayList<>();
         this.forceMute = null;
         this.headOfMafia = null;
         this.inquiryCheck = false;
@@ -1550,6 +1555,7 @@ public class God
     {
         for(Player player : players)
         {
+            System.out.println(player.getUserName() + " Role Is : " + player.getRole().toString());
             chatRoom.sendTo(new Chat("SPECIAL", player.getUserName() + " Your Role Is : " + player.getRole().toString()), player);
         }
     }
@@ -1671,5 +1677,21 @@ public class God
             }
         }
         return s;
+    }
+
+    public void saveChat(Chat chat)
+    {
+        chats.add(chat);
+        try(PrintWriter out = new PrintWriter(new FileWriter("chat.txt")))
+        {
+            for(Chat c : chats)
+            {
+                out.println(c.fileToString());
+            }
+        } 
+        catch (Exception e) 
+        {
+            System.out.println("error in writing chats.");
+        }
     }
 }
