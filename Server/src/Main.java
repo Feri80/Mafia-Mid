@@ -2,8 +2,18 @@ import java.util.Scanner;
 
 import model.logic.*;
 
+/**
+ * This class is the main class of the server that runs a new server
+ * 
+ * @author Farhad Aman
+ * @version 1.0
+ */
 public class Main 
 {
+    /**
+     * this method gets the number of players of the game that is at least 8
+     * @return the number of players 
+     */
     public static int getPlayersCount()
     {
         int playersCount = 0;
@@ -24,6 +34,10 @@ public class Main
         return playersCount;
     }   
 
+    /**
+     * this method gets the port of the server
+     * @return port
+     */
     public static int getPort()
     {
         int port = 0;
@@ -43,6 +57,10 @@ public class Main
         return port;
     }
 
+    /**
+     * this method is the main method of the program
+     * @param args
+     */
     public static void main(String[] args) 
     {
         God god = new God(getPlayersCount(), getPort());

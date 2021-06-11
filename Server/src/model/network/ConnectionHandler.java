@@ -6,13 +6,29 @@ import java.net.Socket;
 
 import model.logic.*;
 
+/**
+ * This class creates the first connection with the client
+ * 
+ * @author Farhad Aman
+ * @version 1.0
+ */
 public class ConnectionHandler implements Runnable
 {
-
+    /**
+     * the socket channel that progtam use it to connect with palyer
+     */
     private Socket channel;
 
+    /**
+     * the chat room of the program
+     */
     private ChatRoom chatRoom;
 
+    /**
+     * creates a new connection handler
+     * @param channel
+     * @param chatRoom
+     */
     public ConnectionHandler(Socket channel, ChatRoom chatRoom)
     {
         this.channel = channel;

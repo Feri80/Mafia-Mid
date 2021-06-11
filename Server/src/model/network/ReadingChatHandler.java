@@ -2,19 +2,33 @@ package model.network;
 
 import java.io.IOException;
 
-import model.logic.ChatQueue;
 import model.logic.God;
 import model.logic.Player;
 import model.roles.Mafia;
 
+/**
+ * This class reads new chat from a player and adds it to the chat queue
+ * 
+ * @author Farhad Aman
+ * @version 1.0
+ */
 public class ReadingChatHandler implements Runnable
 {
+    /**
+     * the god for getting storages
+     */
     private God god;
 
+    /**
+     * the player that we want to read from
+     */
     private Player player;
 
-    private ChatQueue chatQueue;
-
+    /**
+     * creates a new reading chat handler 
+     * @param god
+     * @param player
+     */
     public ReadingChatHandler(God god, Player player)
     {
         this.god = god;

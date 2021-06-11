@@ -9,8 +9,17 @@ import java.util.HashMap;
 import model.network.*;
 import model.roles.*;
 
+/**
+ * This class contains the logic of the game and most of the methods of server
+ * 
+ * @author Farhad Aman
+ * @version 1.0
+ */
 public class God 
 {
+    /**
+     * some colors program use in console
+     */
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -21,40 +30,91 @@ public class God
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m"; 
 
+    /**
+     * the players of the game
+     */
     private ArrayList<Player> players;   
 
+    /**
+     * the players are alive
+     */
     private ArrayList<Player> alivePlayers;   
 
+    /**
+     * the citizens
+     */
     private ArrayList<Player> citizens;
 
+    /**
+     * the mafias
+     */
     private ArrayList<Player> mafias;
 
+    /**
+     * the votes of players in voting state
+     */
     private HashMap<Player, Player> votes;
 
+    /**
+     * the kills in night state
+     */
     private ArrayList<Player> nightKills;
 
+    /**
+     * the whole chats of players in day
+     */
     private ArrayList<Chat> chats;
 
+    /**
+     * the player who is force muted in day
+     */
     private Player forceMute;
 
+    /**
+     * the player who is the head of mafia first god father the random
+     */
     private Player headOfMafia;
 
+    /**
+     * true if inquiry check should be done 
+     */
     private boolean inquiryCheck;
 
+    /**
+     * the number of players of the game
+     */
     private int playersCount;
 
+    /**
+     * the number of alive players of the game
+     */
     private int alivePlayersCount;
 
+    /**
+     * the number of alive mafias
+     */
     private int aliveMafiaCount;
 
+    /**
+     * the port of the server
+     */
     private int port;
 
+    /**
+     * the chat room of the game
+     */
     private ChatRoom chatRoom;
 
+    /**
+     * the chat queue of the game
+     */
     private ChatQueue chatQueue;
 
-    private String state;
-
+    /**
+     * creates a new god
+     * @param playersCount
+     * @param port
+     */
     public God(int playersCount, int port)
     {
         this.players = new ArrayList<>();
@@ -80,9 +140,11 @@ public class God
         this.port = port;
         chatRoom = new ChatRoom();
         chatQueue = new ChatQueue();
-        state = "trash";
     }
 
+    /**
+     * this methods starts the whole game
+     */
     public void startGame()
     {
         System.out.println("server port : " + port);
@@ -105,6 +167,9 @@ public class God
         loop();
     }
 
+    /**
+     * this methods starts the first night of the game
+     */
     private void startFirstNight()
     {
         System.out.println("first night started.");
@@ -180,6 +245,9 @@ public class God
         }
     }
 
+    /**
+     * this method performs the game loop
+     */
     private void loop()
     {
         while(true)
@@ -192,10 +260,11 @@ public class God
         }
     }
 
+    /**
+     * this method starts the day state
+     */
     private void startDay()
     {
-        state = "day";
-
         chatRoom.sendToAll(new Chat("SPECIAL", "Day Starts You Can Wake Up."));
 
         if(inquiryCheck == true)
@@ -313,6 +382,9 @@ public class God
         forceMute = null;
     }
 
+    /**
+     * this method starts the voting state
+     */
     private void startVoting()
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "Voting Please Choose One Of The Valid Choices In 30 Seconds."));
@@ -455,6 +527,9 @@ public class God
         }
     }
 
+    /**
+     * this method starts the night state
+     */
     private void startNight()
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "Night Starts."));
@@ -574,6 +649,10 @@ public class God
         System.out.println("night completed.");
     }
 
+    /**
+     * this method starts the mafia role in the night
+     * @return the mafia candidate to kill
+     */
     private Player mafiaRole()
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "Mafia Wake Up."));
@@ -679,6 +758,10 @@ public class God
         return candidate;
     }
 
+    /**
+     * this method starts the doctor lecter role in the night
+     * @return the doctor lecter candidate to heal
+     */
     private Player doctorLecterRole()
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "DoctorLecter Wake Up."));
@@ -791,6 +874,10 @@ public class God
         return candidate;
     }
 
+    /**
+     * this method starts the doctor role in the night
+     * @return the doctor candidate to heal
+     */
     private Player doctorRole()
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "Doctor Wake Up."));
@@ -897,6 +984,9 @@ public class God
         return candidate;
     }
 
+    /**
+     * this method starts the detective role in the night
+     */
     private void detectiveRole()
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "Detective Wake Up."));
@@ -1009,6 +1099,10 @@ public class God
         chatRoom.sendToAll(new Chat("SPECIAL", "Detective Sleep."));
     }
 
+    /**
+     * this method starts the sniper role in the night
+     * @return the sniper candidate to shot
+     */
     private Player sniperRole()
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "Sniper Wake Up."));
@@ -1113,6 +1207,10 @@ public class God
         return candidate;
     }
 
+    /**
+     * this method starts the psychologist role in the night
+     * @return the psychologist candidate to force mute
+     */
     private Player psychologistRole() 
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "Psychologist Wake Up."));
@@ -1210,6 +1308,10 @@ public class God
         return candidate;
     }
 
+    /**
+     * this method starts the armored role in the night
+     * @return request of inquiry
+     */
     private boolean armoredRole() 
     {
         chatRoom.sendToAll(new Chat("SPECIAL", "Armored Wake Up."));
@@ -1302,6 +1404,10 @@ public class God
         }
     }
 
+    /**
+     * this method starts the mayor role in the voting
+     * @return request to cancel the voting
+     */
     private boolean mayorRole()
     {
         Player mayor = null;
@@ -1388,6 +1494,9 @@ public class God
         }
     }
 
+    /**
+     * @return list of alive players in string
+     */
     private String alivePlayersToString()
     {
         String s = "";
@@ -1400,6 +1509,9 @@ public class God
         return s;
     }
 
+    /**
+     * @return list of alive citizens in string
+     */
     private String aliveCitizenToString()
     {
         String s = "";
@@ -1415,6 +1527,9 @@ public class God
         return s;
     }
 
+    /**
+     * @return lisr of alive mafias in string
+     */
     public String aliveMafiaToString()
     {
         String s = "";
@@ -1430,6 +1545,9 @@ public class God
         return s;
     }
 
+    /**
+     * @return list of voters and who vote in string
+     */
     private String votersToString()
     {
         String s = "";
@@ -1440,6 +1558,9 @@ public class God
         return s;
     }
 
+    /**
+     * @return list of players number of votes in string
+     */
     private String votesToString()
     {
         String s = "";
@@ -1463,6 +1584,9 @@ public class God
         return s;
     }
 
+    /**
+     * @return the player who is candidate to kill in voting state
+     */
     private Player findKillCandidate()
     {
         int[] a = new int[alivePlayersCount];
@@ -1497,6 +1621,9 @@ public class God
         return null;
     }
 
+    /**
+     * checks if the game must be finished
+     */
     private void checkFinishConditions()
     {
         if(aliveMafiaCount == 0)
@@ -1529,6 +1656,9 @@ public class God
         }
     }
     
+    /**
+     * set the roles of players in random way
+     */
     private void setRoles()
     {
         ArrayList<Role> roles = new ArrayList<>();
@@ -1561,6 +1691,9 @@ public class God
         }
     }
     
+    /**
+     * send the roles of players to the clients
+     */
     private void sendRoles()
     {
         for(Player player : players)
@@ -1570,6 +1703,9 @@ public class God
         }
     }
     
+    /**
+     * introduce mafias to each other
+     */
     private void mafiasIntroduction()
     {
         String text = "Mafias : \n";
@@ -1591,6 +1727,9 @@ public class God
         chatRoom.sendTo(new Chat("SPECIAL", text), mafias);
     }
     
+    /**
+     * introduce dotor to the mayor
+     */
     private void introduceDoctorToMayor()
     {
         for(Player mayor : citizens)
@@ -1608,6 +1747,9 @@ public class God
         }
     }
 
+    /**
+     * changes the head of mafias 
+     */
     public void changeHeadOfMafia()
     {
         ArrayList<Player> candidateMafias = new ArrayList<>();
@@ -1627,51 +1769,83 @@ public class God
         chatRoom.sendTo(new Chat("SPECIAL", headOfMafia.getUserName() + " Is New Head Of Mafia."), mafias);
     }
 
+    /**
+     * @return list of players
+     */
     public ArrayList<Player> getPlayers()
     {
         return players;
     }
 
+    /**
+     * @return chat queue
+     */
     public ChatQueue getChatQueue()
     {
         return chatQueue;
     }
 
+    /**
+     * @return list of alive players
+     */
     public ArrayList<Player> getAlivePlayers()
     {
         return alivePlayers;
     }
 
+    /**
+     * sets the number of alive players
+     * @param k
+     */
     public void setAlivePlayersCount(int k)
     {
         alivePlayersCount = k;
     }
 
+    /**
+     * @return the number of alive players
+     */
     public int getAlivePlayersCount()
     {
         return alivePlayersCount;
     }
 
+    /**
+     * sets the number of alive mafias
+     * @param k
+     */
     public void setAliveMafiaCount(int k)
     {
         aliveMafiaCount = k;
     }
 
+    /**
+     * @return the number of alive mafias
+     */
     public int getAliveMafiaCount()
     {
         return aliveMafiaCount;
     } 
 
+    /**
+     * @return head of mafias
+     */
     public Player getHeadOfMafia()
     {
         return headOfMafia;
     }
 
+    /**
+     * @return chat room of the game
+     */
 	public ChatRoom getChatRoom() 
     {
 		return chatRoom;
 	}
 
+    /**
+     * @return list of players with their state in string
+     */
     public String deadOrAliveToString()
     {
         String s = "";
@@ -1689,6 +1863,10 @@ public class God
         return s;
     }
 
+    /**
+     * saves chats in file
+     * @param chat
+     */
     public void saveChat(Chat chat)
     {
         chats.add(chat);
@@ -1705,6 +1883,9 @@ public class God
         }
     }
 
+    /**
+     * @return force muted player
+     */
     public Player getForceMute()
     {
         return forceMute;
