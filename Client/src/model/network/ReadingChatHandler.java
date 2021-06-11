@@ -3,11 +3,23 @@ package model.network;
 
 import model.logic.*;
 
-
+/**
+ * This class reads new chats from server
+ * 
+ * @author Farhad Aman
+ * @version 1.0
+ */
 public class ReadingChatHandler implements Runnable
 {
+    /**
+     * the client handler of the game
+     */
     private ClientHandler clientHandler;
 
+    /**
+     * creates a new reading chat handler
+     * @param clientHandler
+     */
     public ReadingChatHandler(ClientHandler clientHandler)
     {   
         this.clientHandler = clientHandler;

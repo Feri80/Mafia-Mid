@@ -1,8 +1,18 @@
 import java.util.Scanner;
 import model.logic.ClientHandler;
 
+/**
+ * This class is the main class of the client that starts the client
+ * 
+ * @author Farhad Aman
+ * @version 1.0
+ */
 public class Main 
 {
+    /**
+     * gets the port of the server
+     * @return port
+     */
     public static int getPort()
     {
         int port = 0;
@@ -22,6 +32,10 @@ public class Main
         return port;
     }
 
+    /**
+     * the main method of the program
+     * @param args
+     */
     public static void main(String[] args) 
     {
         ClientHandler clientHandler = new ClientHandler(getPort());
