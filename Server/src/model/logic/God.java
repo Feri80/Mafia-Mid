@@ -1632,7 +1632,7 @@ public class God
             chatRoom.sendToAll(new Chat("SPECIAL", "END"));
             try 
             {
-                Thread.sleep(1000);
+                Thread.sleep(10000);
             } 
             catch (InterruptedException e) 
             {
@@ -1646,7 +1646,7 @@ public class God
             chatRoom.sendToAll(new Chat("SPECIAL", "END"));
             try 
             {
-                Thread.sleep(1000);
+                Thread.sleep(10000);
             } 
             catch (InterruptedException e) 
             {
