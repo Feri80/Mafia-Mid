@@ -538,19 +538,19 @@ public class God
 
         Player mafiasCandidate = mafiaRole();
 
-        System.out.println("mafias role completed.");
+        System.out.println("mafias candiate is " + mafiasCandidate);
 
         System.out.println("doctor lecter role started.");
 
         Player doctorLecterCandidate = doctorLecterRole();
 
-        System.out.println("doctor lecter role completed.");
+        System.out.println("doctor lecter candidate is " + doctorLecterCandidate);
 
         System.out.println("doctor role started.");
 
         Player doctorCandidate = doctorRole();
 
-        System.out.println("doctor role completed.");
+        System.out.println("doctor candiate is " + doctorCandidate);
 
         System.out.println("detective role started.");
 
@@ -562,7 +562,7 @@ public class God
 
         Player sniperCandidate = sniperRole();
 
-        System.out.println("sniper role completed.");
+        System.out.println("sniper candidate is " + sniperCandidate);
 
         System.out.println("psychologist role started.");
 
@@ -590,51 +590,44 @@ public class God
 
         nightKills.clear();
 
-        try 
+        if(sniperCandidate != null && sniperCandidate.getRole() instanceof Sniper)
         {
-            if(sniperCandidate.getRole() instanceof Sniper)
-            {
-                chatRoom.sendTo(new Chat("SPECIAL", "KILL"), sniperCandidate);
-                nightKills.add(sniperCandidate);
-                sniperCandidate.setIsAlive(false);
-                alivePlayersCount--;
-                alivePlayers.remove(sniperCandidate);
-            }
-            else if(!(sniperCandidate.getUserName().equals(doctorLecterCandidate.getUserName())))
-            {
-                if(sniperCandidate.getUserName().equals(headOfMafia.getUserName()))
-                {
-                    changeHeadOfMafia();
-                }
-                chatRoom.sendTo(new Chat("SPECIAL", "KILL"), sniperCandidate);
-                nightKills.add(sniperCandidate);
-                sniperCandidate.setIsAlive(false);
-                alivePlayersCount--;
-                alivePlayers.remove(sniperCandidate);
-                if(sniperCandidate.getRole() instanceof Mafia)
-                {
-                    aliveMafiaCount--;
-                }
-            }
-    
-            if((mafiasCandidate.getRole() instanceof Armored) && ((Armored)mafiasCandidate.getRole()).getIsArmored() == true)
-            {
-                ((Armored)mafiasCandidate.getRole()).brokeArmor();
-            }
-            else if(!(mafiasCandidate.getUserName().equals(doctorCandidate.getUserName())))
-            {
-                chatRoom.sendTo(new Chat("SPECIAL", "KILL"), mafiasCandidate);
-                nightKills.add(mafiasCandidate);
-                mafiasCandidate.setIsAlive(false);
-                alivePlayersCount--;
-                alivePlayers.remove(mafiasCandidate);
-            }
-        } 
-        catch (Exception e) 
+            chatRoom.sendTo(new Chat("SPECIAL", "KILL"), sniperCandidate);
+            nightKills.add(sniperCandidate);
+            sniperCandidate.setIsAlive(false);
+            alivePlayersCount--;
+            alivePlayers.remove(sniperCandidate);
+        }
+        else if(sniperCandidate != null && doctorLecterCandidate != null && !(sniperCandidate.getUserName().equals(doctorLecterCandidate.getUserName())))
         {
-
+            if(sniperCandidate.getUserName().equals(headOfMafia.getUserName()))
+            {
+                changeHeadOfMafia();
+            }
+            chatRoom.sendTo(new Chat("SPECIAL", "KILL"), sniperCandidate);
+            nightKills.add(sniperCandidate);
+            sniperCandidate.setIsAlive(false);
+            alivePlayersCount--;
+            alivePlayers.remove(sniperCandidate);
+            if(sniperCandidate.getRole() instanceof Mafia)
+            {
+                aliveMafiaCount--;
+            }
         }
 
+        if(mafiasCandidate != null && (mafiasCandidate.getRole() instanceof Armored) && ((Armored)mafiasCandidate.getRole()).getIsArmored() == true)
+        {
+            ((Armored)mafiasCandidate.getRole()).brokeArmor();
+        }
+        else if(mafiasCandidate != null && doctorCandidate != null && !(mafiasCandidate.getUserName().equals(doctorCandidate.getUserName())))
+        {
+            chatRoom.sendTo(new Chat("SPECIAL", "KILL"), mafiasCandidate);
+            nightKills.add(mafiasCandidate);
+            mafiasCandidate.setIsAlive(false);
+            alivePlayersCount--;
+            alivePlayers.remove(mafiasCandidate);
+        }
+        
         chatRoom.sendToAll(new Chat("SPECIAL", "Day Starts In 10 Seconds."));
 
         try 
