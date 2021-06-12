@@ -295,11 +295,12 @@ public class God
         }
         else
         {
-            String s = nightKills.size() + " Players Killed Last Night \n";
+            String s = nightKills.size() + " Players Killed Last Night \n" + ANSI_YELLOW;
             for(Player p : nightKills)
             {
                 s += p.getUserName() + "\n";
             }
+            s += ANSI_RESET;
             chatRoom.sendToAll(new Chat("SPECIAL", s));
             nightKills.clear();
         }
@@ -329,7 +330,7 @@ public class God
 
         if(forceMute != null)
         {
-            chatRoom.sendToAll(new Chat("SPECIAL",ANSI_YELLOW + forceMute.toString() + ANSI_RESET + " Is Muted In This Day."));
+            chatRoom.sendToAll(new Chat("SPECIAL",ANSI_YELLOW + forceMute.toString() + ANSI_BLUE + " Is Muted In This Day."));
         }
 
         ArrayList<Integer> isTimed = new ArrayList<>();
@@ -387,7 +388,7 @@ public class God
      */
     private void startVoting()
     {
-        chatRoom.sendToAll(new Chat("SPECIAL", "Voting Please Choose One Of The Valid Choices In 30 Seconds."));
+        chatRoom.sendToAll(new Chat("SPECIAL", "Voting Please Choose One Of The Valid Choices In 30 Seconds.\nSend Your Vote At Least 2 Times."));
         chatRoom.sendToAll(new Chat("SPECIAL", alivePlayersToString()));
 
         chatRoom.sendToAllAlive(new Chat("SPECIAL", "VOTE"));
@@ -486,7 +487,7 @@ public class God
         }
         else
         {
-            chatRoom.sendToAll(new Chat("SPECIAL", ANSI_YELLOW + candidate.getUserName() + ANSI_RESET + " Will Be Killed."));
+            chatRoom.sendToAll(new Chat("SPECIAL", ANSI_YELLOW + candidate.getUserName() + ANSI_BLUE + " Will Be Killed."));
             chatRoom.sendToAll(new Chat("SPECIAL", "It Is Mayor's Time To Play."));
 
             boolean isCanceled = mayorRole();
@@ -655,7 +656,7 @@ public class God
         {
             if(player.getIsAlive() == true)
             {
-                chatRoom.sendTo(new Chat("SPECIAL", "Voting Please Choose One Of The Valid Choices In 20 Seconds.\n Just Head Of Mafia's Vote Is Effective."), player);
+                chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Valid Choices In 20 Seconds.\nJust Head Of Mafia's Vote Is Effective.\nSend Your Vote At Least 2 Times."), player);
                 chatRoom.sendTo(new Chat("SPECIAL", aliveCitizenToString()), player);
                 chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), player);
                 chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), player);
@@ -790,7 +791,7 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Mafias To Heal In 20 Seconds. You Cant Choose Yourself Twice."), doctorLecter);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Mafias To Heal In 20 Seconds.\nYou Cant Choose Yourself Twice.\nSend Your Vote At Least 2 Times."), doctorLecter);
             chatRoom.sendTo(new Chat("SPECIAL", aliveMafiaToString()), doctorLecter);
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), doctorLecter);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), doctorLecter);
@@ -906,7 +907,7 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Heal In 20 Seconds. You Cant Choose Yourself 3 Times."), doctor);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Heal In 20 Seconds.\nYou Cant Choose Yourself 3 Times.\nSend Your Vote At Least 2 Times."), doctor);
             chatRoom.sendTo(new Chat("SPECIAL", alivePlayersToString()), doctor);
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), doctor);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), doctor);
@@ -1015,7 +1016,7 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Detect In 20 Seconds. You Cant Choose Yourself."), detective);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Detect In 20 Seconds.\nYou Cant Choose Yourself.\nSend Your Vote At Least 2 Times."), detective);
             chatRoom.sendTo(new Chat("SPECIAL", alivePlayersToString()), detective);
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), detective);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), detective);
@@ -1133,7 +1134,7 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Snipe In 20 Seconds."), sniper);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Snipe In 20 Seconds.\nSend Your Vote At Least 2 Times."), sniper);
             chatRoom.sendTo(new Chat("SPECIAL", alivePlayersToString()), sniper);
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), sniper);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), sniper);
@@ -1239,7 +1240,7 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Mute In 20 Seconds."), psychologist);
+            chatRoom.sendTo(new Chat("SPECIAL", "Please Choose One Of The Players To Mute In 20 Seconds.\nSend Your Vote At Least 2 Times."), psychologist);
             chatRoom.sendTo(new Chat("SPECIAL", alivePlayersToString()), psychologist);
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), psychologist);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), psychologist);
@@ -1340,7 +1341,7 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat("SPECIAL", "Armored If Your Want To Have Inquiry Tomorrow Just Send 1\nNote That Your Last Message Will Be Accepted."), armored);
+            chatRoom.sendTo(new Chat("SPECIAL", "Armored If Your Want To Have Inquiry Tomorrow Just Send 1\nSend Your Vote At Least 2 Times."), armored);
             
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), armored);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), armored);
@@ -1434,7 +1435,7 @@ public class God
         }
         else
         {
-            chatRoom.sendTo(new Chat("SPECIAL", "Mayor If Your Want To Cancel This Voting Just Send 1\nNote That Your Last Message Will Be Accepted."), mayor);
+            chatRoom.sendTo(new Chat("SPECIAL", "Mayor If Your Want To Cancel This Voting Just Send 1\nSend Your Vote At Least 2 Times."), mayor);
             
             chatRoom.sendTo(new Chat("SPECIAL", "VOTE"), mayor);
             chatRoom.sendTo(new Chat("SPECIAL", "UNMUTE"), mayor);
@@ -1692,7 +1693,7 @@ public class God
         for(Player player : players)
         {
             System.out.println(player.getUserName() + " Role Is : " + player.getRole().toString());
-            chatRoom.sendTo(new Chat("SPECIAL", player.getUserName() + " Your Role Is : " + player.getRole().toString()), player);
+            chatRoom.sendTo(new Chat("SPECIAL",ANSI_YELLOW + player.getUserName() + ANSI_BLUE + " Your Role Is : " + player.getRole().toString()), player);
         }
     }
     
@@ -1706,15 +1707,15 @@ public class God
         {
             if(mafia.getRole() instanceof GodFather)
             {
-                text += (mafia.getUserName() + " Is GodFather \n"); 
+                text += (ANSI_YELLOW + mafia.getUserName() + ANSI_BLUE + " Is GodFather \n"); 
             }
             else if(mafia.getRole() instanceof DoctorLecter)
             {
-                text += (mafia.getUserName() + " Is Doctor Lecter \n");
+                text += (ANSI_YELLOW + mafia.getUserName() + ANSI_BLUE + " Is Doctor Lecter \n");
             }
             else
             {
-                text += (mafia.getUserName() + " Is Regular Mafia \n");
+                text += (ANSI_YELLOW + mafia.getUserName() + ANSI_BLUE + " Is Regular Mafia \n");
             }
         }
         chatRoom.sendTo(new Chat("SPECIAL", text), mafias);
@@ -1733,7 +1734,7 @@ public class God
                 {
                     if(doctor.getRole() instanceof Doctor)
                     {
-                        chatRoom.sendTo(new Chat("SPECIAL", doctor.getUserName() + " Is Doctor"), mayor);
+                        chatRoom.sendTo(new Chat("SPECIAL", ANSI_YELLOW + doctor.getUserName() + ANSI_BLUE + " Is Doctor"), mayor);
                     }
                 }
             }
@@ -1759,7 +1760,7 @@ public class God
         }
         Collections.shuffle(candidateMafias);
         headOfMafia = candidateMafias.get(0);
-        chatRoom.sendTo(new Chat("SPECIAL", ANSI_YELLOW + headOfMafia.getUserName() + ANSI_RESET + " Is New Head Of Mafia."), mafias);
+        chatRoom.sendTo(new Chat("SPECIAL", ANSI_YELLOW + headOfMafia.getUserName() + ANSI_BLUE + " Is New Head Of Mafia."), mafias);
     }
 
     /**
