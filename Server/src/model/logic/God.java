@@ -295,7 +295,7 @@ public class God
         }
         else
         {
-            String s = nightKills.size() + " Players Killed Last Night \n ";
+            String s = nightKills.size() + " Players Killed Last Night \n";
             for(Player p : nightKills)
             {
                 s += p.getUserName() + "\n";
@@ -329,7 +329,7 @@ public class God
 
         if(forceMute != null)
         {
-            chatRoom.sendToAll(new Chat("SPECIAL", forceMute.toString() + " Is Muted In This Day."));
+            chatRoom.sendToAll(new Chat("SPECIAL",ANSI_YELLOW + forceMute.toString() + ANSI_RESET + " Is Muted In This Day."));
         }
 
         ArrayList<Integer> isTimed = new ArrayList<>();
@@ -486,7 +486,7 @@ public class God
         }
         else
         {
-            chatRoom.sendToAll(new Chat("SPECIAL", candidate.getUserName() + " Will Be Killed."));
+            chatRoom.sendToAll(new Chat("SPECIAL", ANSI_YELLOW + candidate.getUserName() + ANSI_RESET + " Will Be Killed."));
             chatRoom.sendToAll(new Chat("SPECIAL", "It Is Mayor's Time To Play."));
 
             boolean isCanceled = mayorRole();
@@ -619,7 +619,7 @@ public class God
         {
             ((Armored)mafiasCandidate.getRole()).brokeArmor();
         }
-        else if(mafiasCandidate != null && doctorCandidate != null && !(mafiasCandidate.getUserName().equals(doctorCandidate.getUserName())))
+        else if(mafiasCandidate != null && (doctorCandidate == null || !(mafiasCandidate.getUserName().equals(doctorCandidate.getUserName()))))
         {
             chatRoom.sendTo(new Chat("SPECIAL", "KILL"), mafiasCandidate);
             nightKills.add(mafiasCandidate);
@@ -1492,7 +1492,7 @@ public class God
      */
     private String alivePlayersToString()
     {
-        String s = "";
+        String s = "\n";
         int i = 1;
         for(Player player : alivePlayers)
         {
@@ -1507,7 +1507,7 @@ public class God
      */
     private String aliveCitizenToString()
     {
-        String s = "";
+        String s = "\n";
         int i = 1;
         for(Player player : alivePlayers)
         {
@@ -1525,7 +1525,7 @@ public class God
      */
     public String aliveMafiaToString()
     {
-        String s = "";
+        String s = "\n";
         int i = 1;
         for(Player player : alivePlayers)
         {
@@ -1543,7 +1543,7 @@ public class God
      */
     private String votersToString()
     {
-        String s = "";
+        String s = "\n";
         for(Player voter : votes.keySet())
         {
             s += ANSI_YELLOW + voter.getUserName() + ANSI_GREEN + " -> " + ANSI_PURPLE + votes.get(voter) + ANSI_RESET + "\n";
@@ -1556,7 +1556,7 @@ public class God
      */
     private String votesToString()
     {
-        String s = "";
+        String s = "\n";
         int[] a = new int[alivePlayersCount];
 
         for(int i = 0; i < alivePlayersCount; i++)
@@ -1759,7 +1759,7 @@ public class God
         }
         Collections.shuffle(candidateMafias);
         headOfMafia = candidateMafias.get(0);
-        chatRoom.sendTo(new Chat("SPECIAL", headOfMafia.getUserName() + " Is New Head Of Mafia."), mafias);
+        chatRoom.sendTo(new Chat("SPECIAL", ANSI_YELLOW + headOfMafia.getUserName() + ANSI_RESET + " Is New Head Of Mafia."), mafias);
     }
 
     /**
