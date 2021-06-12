@@ -38,7 +38,7 @@ public class ReadingChatHandler implements Runnable
                     System.out.println("Special Chat Got.");
                     if(chat.getText().equals("MUTE"))
                     {
-                        System.out.println("Your Muted.");
+                        System.out.println(ClientHandler.ANSI_CYAN + "Your Muted." + ClientHandler.ANSI_RESET);
                         clientHandler.setIsMuted(true);
                         try 
                         {
@@ -51,7 +51,7 @@ public class ReadingChatHandler implements Runnable
                     }
                     else if(chat.getText().equals("UNMUTE"))
                     {
-                        System.out.println("Your Unmuted.");
+                        System.out.println(ClientHandler.ANSI_CYAN + "Your Unmuted." + ClientHandler.ANSI_RESET);
                         clientHandler.setIsMuted(false);
                         try 
                         {
