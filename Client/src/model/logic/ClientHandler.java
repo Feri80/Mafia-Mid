@@ -145,7 +145,7 @@ public class ClientHandler
                     } 
                     catch (InputMismatchException e) 
                     {
-                        System.out.println("Voting State !!! Please Insert A Number.");
+                        System.out.println("Please Insert A Valid Input Another Time.");
                     }
                 }
                 else
