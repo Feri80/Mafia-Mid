@@ -93,19 +93,19 @@ public class ClientHandler
         try
         {
             this.channel = new Socket("localhost", port);
-            System.out.println("Socket Created.");
+            System.out.println(ANSI_CYAN + "Socket Created." + ANSI_RESET);
             this.objectOutputStream = new ObjectOutputStream(channel.getOutputStream());
             this.objectInputStream = new ObjectInputStream(channel.getInputStream());
-            System.out.println("Streams Created.");
+            System.out.println(ANSI_CYAN + "Streams Created." + ANSI_RESET);
         } 
         catch (Exception e) 
         {   
-            System.out.println("Error In Making Socket Or Streams.");
+            System.out.println(ANSI_RED + "Error In Making Socket Or Streams." + ANSI_RESET);
             e.printStackTrace();
             return;
         }
 
-        System.out.println("Successfully Connected To The Server.");
+        System.out.println(ANSI_CYAN + "Successfully Connected To The Server." + ANSI_RESET);
 
         Thread thread = new Thread(new ReadingChatHandler(this));
         thread.start();
@@ -139,13 +139,13 @@ public class ClientHandler
                             } 
                             catch (Exception e) 
                             {
-                                System.out.println("Sending Chat Error.");
+                                System.out.println(ANSI_RED + "Sending Chat Error." + ANSI_RESET);
                             }
                         }
                     } 
                     catch (InputMismatchException e) 
                     {
-                        System.out.println("Please Insert A Valid Input Another Time.");
+                        System.out.println(ANSI_YELLOW + "Please Insert A Valid Input Another Time." + ANSI_RESET);
                     }
                 }
                 else
@@ -166,7 +166,7 @@ public class ClientHandler
                             } 
                             catch (Exception e) 
                             {
-                                System.out.println("Sending Chat Error.");
+                                System.out.println(ANSI_RED + "Sending Chat Error." + ANSI_RESET);
                             }
                         }    
                     } 

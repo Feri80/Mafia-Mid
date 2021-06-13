@@ -35,7 +35,6 @@ public class ReadingChatHandler implements Runnable
                 Chat chat = (Chat)clientHandler.getObjectInputStream().readObject();
                 if(chat.getSender().equals("SPECIAL"))
                 {   
-                    System.out.println("Special Chat Got.");
                     if(chat.getText().equals("MUTE"))
                     {
                         System.out.println(ClientHandler.ANSI_CYAN + "Your Muted." + ClientHandler.ANSI_RESET);
@@ -64,6 +63,7 @@ public class ReadingChatHandler implements Runnable
                     }
                     else if(chat.getText().equals("VOTE"))
                     {
+                        System.out.println(ClientHandler.ANSI_CYAN + "Voting State." + ClientHandler.ANSI_RESET);
                         clientHandler.setIsVoting(true);
                         try 
                         {
@@ -76,6 +76,7 @@ public class ReadingChatHandler implements Runnable
                     }
                     else if(chat.getText().equals("FREE"))
                     {
+                        System.out.println(ClientHandler.ANSI_CYAN + "Chating State." + ClientHandler.ANSI_RESET);
                         clientHandler.setIsVoting(false);
                         try 
                         {
@@ -106,7 +107,6 @@ public class ReadingChatHandler implements Runnable
                 }
                 else
                 {
-                    System.out.println("Non Special Chat Got.");
                     if(!(chat.getSender().equals(clientHandler.getUserName())))
                     {
                         System.out.println(chat);
@@ -115,7 +115,7 @@ public class ReadingChatHandler implements Runnable
             } 
             catch(Exception e)
             {
-                System.out.println("Reading Error.");
+                System.out.println(ClientHandler.ANSI_RED + "Reading Error." + ClientHandler.ANSI_RESET);
                 e.printStackTrace();
                 break;
             }
