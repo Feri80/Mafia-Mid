@@ -599,7 +599,7 @@ public class God
             alivePlayersCount--;
             alivePlayers.remove(sniperCandidate);
         }
-        else if(sniperCandidate != null && doctorLecterCandidate != null && !(sniperCandidate.getUserName().equals(doctorLecterCandidate.getUserName())))
+        else if(sniperCandidate != null && (doctorLecterCandidate == null || !(sniperCandidate.getUserName().equals(doctorLecterCandidate.getUserName()))))
         {
             if(sniperCandidate.getUserName().equals(headOfMafia.getUserName()))
             {
@@ -1842,7 +1842,7 @@ public class God
      */
     public String deadOrAliveToString()
     {
-        String s = "";
+        String s = "\n";
         for(Player p : players)
         {
             if(p.getIsAlive() == true)
