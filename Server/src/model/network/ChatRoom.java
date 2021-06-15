@@ -166,6 +166,10 @@ public class ChatRoom
      */
     public synchronized boolean addPlayer(Player player)
     {
+        if(player.getUserName().trim().equals("SPECIAL") || player.getUserName().trim().length() == 0)
+        {
+            return false;
+        }
         for(Player p : players)
         {
             if(player.getUserName().trim().equals(p.getUserName().trim()))
