@@ -334,7 +334,7 @@ public class God
         }
 
         ArrayList<Integer> isTimed = new ArrayList<>();
-        Thread timer = new Thread(new Timer(isTimed, 120000));
+        Thread timer = new Thread(new Timer(isTimed, 300000));
         timer.start();
 
         System.out.println("chat started.");
